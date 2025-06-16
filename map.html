@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Карта Екатеринбурга с маршрутами</title>
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+    .route-button {
+      background-color: #f9db24;
+      border: none;
+      color: black;
+      padding: 8px 12px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    #locationPrompt {
+      z-index: 9999; /* Убедитесь, что модальное окно выше всего */
+    }
+    #locationPrompt button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #locationPrompt button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Контейнер карты -->
+<div id="map"></div>
+
+<!-- Выбор века — по центру снизу -->
+<div id="centurySelector" style="
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background-color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+">
+  <select id="centuryFilter" onchange="applyCenturyFilter()" style="
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  ">
+    <option value="">Все эпохи</option>
+    <option value="18">XVIII век</option>
+    <option value="19">XIX век</option>
+    <option value="20">XX век</option>
+    <option value="21">XXI век</option>
+  </select>
+</div>
+
+<!-- Кнопка сброса — слева снизу -->
+<div id="resetControl" style="
+  position: absolute;
+  bottom: 40px;
+  left: 10px;
+  z-index: 1000;
+">
+  <button onclick="resetUserLocation()" style="
+    padding: 6px 12px;
+    background-color: #e7e7e7;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+  ">Сбросить местоположение</button>
+</div>
+
+<div id="legend" style="
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  font-family: sans-serif;
+  z-index: 1000;
+  width: 160px;
+">
+  <strong>Легенда:</strong><br>
+  <span style="color: #0000FF;">●</span> XVIII век<br>
+  <span style="color: #008000;">●</span> XIX век<br>
+  <span style="color: #FFA500;">●</span> XX век<br>
+  <span style="color: #FF0000;">●</span> XXI век<br>
+</div>
+
+<!-- Подключение API Яндекс.Карт -->
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=cc2edfda-deef-47d7-a963-5853ae3beb53"></script>
+
+<!-- Скрипт карты -->
+<script>
+
+  function showLocationPrompt() {
+    document.getElementById('locationPrompt').style.display = 'block';
+  }
+
+  function closeLocationPrompt() {
+    document.getElementById('locationPrompt').style.display = 'none';
+  }
+  var myMap;
+  var userPosition = null;
+  var currentRoute = null;
+  var userPlacemark = null;
+  var userLocationSet = false; // Флаг — выбрано ли местоположение
+
+  const centuryColors = {
+    18: '#0000FF', // Синий — XVIII век
+    19: '#008000', // Зелёный — XIX век
+    20: '#FFA500', // Оранжевый — XX век
+    21: '#FF0000'  // Красный — XXI век
+  };
+
+  function resetUserLocation() {
+      if (userPlacemark) {
+        myMap.geoObjects.remove(userPlacemark);
+        userPlacemark = null;
+      }
+
+      userPosition = null;
+      userLocationSet = false;
+
+      // Вернуть карту к начальному виду (по желанию)
+      myMap.setCenter([56.838011, 60.597465], 12);
+
+      alert("Выберите новое местоположение на карте.");
+    }
+
+  ymaps.ready(init);
+
+  function init() {
+    // --- Инициализация карты ---
+    myMap = new ymaps.Map("map", {
+      center: [56.838011, 60.597465],
+      zoom: 12,
+      controls: []
+    }, {
+      restrictMapArea: [
+        [56.677354, 60.194179],
+        [57.046116, 61.070928]
+      ]
+    });
+
+    const centuryPresets = {
+      18: 'islands#blueIcon',     // XVIII век — синий
+      19: 'islands#greenIcon',    // XIX век — зелёный
+      20: 'islands#orangeIcon',   // XX век — оранжевый
+      21: 'islands#redIcon'       // XXI век — красный
+    };
+
+    function getIconPreset(centuries) {
+      if (!centuries || centuries.length === 0) return 'islands#grayIcon'; // Неизвестный век — серый
+
+      const priorityCentury = centuries.sort((a, b) => a - b)[0];
+      return centuryPresets[priorityCentury] || 'islands#grayIcon';
+    }
+
+    window.markersData = [
+      {
+        name: 'Горный университет',
+        coords: [59.929272, 30.269435],
+        centuries: [19,20,21]
+      },
+      {
+        name: 'Храм Вознесения Господня',
+        coords: [56.844763, 60.612628],
+        centuries: [19,20,21]
+      },
+      {
+        name: 'Усадьба Расторгуевых–Харитоновых',
+        coords: [56.845602, 60.611045],
+        centuries: [19,20,21]
+      },
+      {
+        name: 'Здание первой типографии',
+        coords: [56.839939, 60.614623],
+        centuries: [18,19,20,21]
+      },
+      {
+        name: 'Екатеринбургский завод',
+        coords: [56.839892, 60.555582],
+        centuries: [18,19,20,21]
+      },
+      {
+        name: 'Георгиевская церковь',
+        coords: [56.881132, 60.522559],
+        centuries: [18,19,20,21]
+      },
+      {
+        name: 'Дом управляющего заводом',
+        coords: [56.840043, 60.552706],
+        centuries: [18,19,20,21]
+      },
+      {
+        name: 'Екатеринбург',
+        coords: [56.837803, 60.598837],
+        centuries: [18,19,20,21]
+      },
+      {
+        name: 'Храм Большой Златоуст',
+        coords: [56.834670, 60.600550],
+        centuries: [19,20,21]
+      },
+      {
+        name: 'Уральский Федеральный Университет',
+        coords: [56.844010, 60.653917],
+        centuries: [21]
+      },
+      {
+        name: 'Уральский Государственный Университет',
+        coords: [56.844010, 60.653917],
+        centuries: [20]
+      },
+      {
+        name: 'Храм-на-Крови',
+        coords: [56.844388, 60.609008],
+        centuries: [21]
+      },
+      {
+        name: 'Дом Н. И. Севастьянова',
+        coords: [56.839162, 60.606091],
+        centuries: [19,20,21]
+      },
+      {
+        name: 'Памятник клавиатуре',
+        coords: [56.832426, 60.607557],
+        centuries: [21]
+      },
+      {
+        name: 'Ельцин Центр',
+        coords: [56.844835, 60.591415],
+        centuries: [21]
+      },
+      {
+        name: 'Бизнес-центр "Высоцкий"',
+        coords: [56.836077, 60.614598],
+        centuries: [21]
+      },
+      {
+        name: 'Екатеринбург Арена',
+        coords: [56.8325, 60.5736],
+        centuries: [21]
+      },
+      {
+        name: 'Дом Правительства Свердловской области',
+        coords: [56.888578, 60.613591],
+        centuries: [20,21]
+      },
+      {
+        name: 'Уралмаш',
+        coords: [56.888578, 60.613591],
+        centuries: [20,21]
+      },
+      {
+        name: 'Цирк',
+        coords: [56.825904, 60.604911],
+        centuries: [20,21]
+      },
+      {
+        name: 'Театр оперы и балета',
+        coords: [56.838880, 60.616657],
+        centuries: [19,20,21]
+      },
+      {
+        name: 'Екатеринбургская плотина',
+        coords: [56.838624, 60.603383],
+        centuries: [18,19,20,21]
+      },
+      {
+        name: 'Домики мастеровых',
+        coords: [56.836044, 60.588615],
+        centuries: [18,19,20,21]
+      },
+      {
+        name: 'Городская управа',
+        coords: [56.837257, 60.597623],
+        centuries: [18,19,20,21]
+      },
+      {
+        name: 'Первая церковь',
+        coords: [56.838352, 60.607489],
+        centuries: [18,19,20,21]
+      },
+      {
+        name: 'Первая школа',
+        coords: [56.838432, 60.571633],
+        centuries: [18,19,20,21]
+      },
+      {
+        name: 'Мемориал на площади 1905 года',
+        coords: [56.837831, 60.596339],
+        centuries: [20,21]
+      },
+      {
+        name: 'Парк Маяковского',
+        coords: [56.8450, 60.6250],
+        centuries: [20,21]
+      },
+      {
+        name: 'Новая набережная реки Исеть',
+        coords: [56.844228, 60.594699],
+        centuries: [21]
+      },
+      {
+        name: 'ТЦ "Алатырь"',
+        coords: [56.832881, 60.582297],
+        centuries: [21]
+      },
+      {
+        name: 'Детская Свердловская железная дорога',
+        coords: [56.817395, 60.639593],
+        centuries: [20,21]
+      }
+    ];
+
+    window.placemarks = [];
+
+    // Добавляем каждую точку как Placemark на карту
+    markersData.forEach(item => {
+      const preset = getIconPreset(item.centuries);
+      const placemark = new ymaps.Placemark(
+        item.coords,
+        {
+          balloonContentHeader: item.name,
+          balloonContentBody: `<button class="route-button" onclick="buildRouteTo(${item.coords[0]}, ${item.coords[1]})">Построить маршрут</button>`,
+          balloonContentFooter: '',
+          centuries: item.centuries
+        },
+        {
+          preset: preset
+        }
+      );
+
+      // Обработчик клика по метке
+      placemark.events.add('click', function () {
+        sendMarkerDataToApp({
+          name: item.name,
+          coords: item.coords,
+          centuries: item.centuries
+        });
+      });
+
+      placemarks.push(placemark);
+      myMap.geoObjects.add(placemark);
+    });
+
+
+    window.applyCenturyFilter = function () {
+      const selectedCentury = document.getElementById('centuryFilter').value;
+
+      placemarks.forEach(placemark => {
+        const pointCenturies = placemark.properties.get('centuries') || [];
+
+        if (!selectedCentury || pointCenturies.includes(parseInt(selectedCentury))) {
+          myMap.geoObjects.add(placemark);
+        } else {
+          myMap.geoObjects.remove(placemark);
+        }
+      });
+    };
+    
+    // Добавляем каждую точку на карту
+    window.buildRouteTo = function(lat, lon) {
+      if (!userPosition) {
+        alert("Сначала выберите ваше местоположение.");
+        return;
+      }
+
+      const destinationCoords = [lat, lon];
+
+      if (currentRoute) {
+        myMap.geoObjects.remove(currentRoute);
+      }
+
+      currentRoute = new ymaps.multiRouter.MultiRoute({
+        referencePoints: [userPosition, destinationCoords],
+        params: {
+          routingMode: 'pedestrian'
+        }
+      }, {
+        boundsAutoApply: true
+      });
+
+      myMap.geoObjects.add(currentRoute);
+    };
+        
+    // --- Выбор пользователем своей позиции ---
+    myMap.events.add('click', function (e) {
+      if (userLocationSet) return; 
+
+      const coords = e.get('coords');
+
+      if (userPlacemark) {
+        myMap.geoObjects.remove(userPlacemark);
+      }
+
+      userPlacemark = new ymaps.Placemark(coords, {
+        balloonContent: 'Вы здесь'
+      }, {
+        preset: 'islands#blackIcon'
+      });
+
+      myMap.geoObjects.add(userPlacemark);
+      myMap.setCenter(coords, 15);
+
+      userPosition = coords;
+      userLocationSet = true;
+    });
+
+    // --- Построение маршрута ---
+    window.buildRouteTo = function(lat, lon) {
+      if (!userPosition) {
+        alert("Сначала выберите ваше местоположение.");
+        return;
+      }
+
+      const destinationCoords = [lat, lon];
+
+      if (currentRoute) {
+        myMap.geoObjects.remove(currentRoute);
+      }
+
+      currentRoute = new ymaps.multiRouter.MultiRoute({
+        referencePoints: [userPosition, destinationCoords],
+        params: {
+          routingMode: 'pedestrian'
+        }
+      }, {
+        boundsAutoApply: true
+      });
+
+      myMap.geoObjects.add(currentRoute);
+    };
+  }
+
+  function sendMarkerDataToApp(markerData) {
+  // Отправляем данные в app.js через WebView
+  window.postMessage(JSON.stringify(markerData), '*');
+  }
+
+  showLocationPrompt();
+  
+</script>
+
+<!-- Модальное окно -->
+<div id="locationPrompt" style="
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: sans-serif;
+  text-align: center;
+">
+  <strong>Пожалуйста, выберите ваше местоположение на карте.</strong>
+  <button onclick="closeLocationPrompt()">OK</button>
+</div>
+
+</body>
+</html>
