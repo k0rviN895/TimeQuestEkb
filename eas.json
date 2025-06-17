@@ -1,5 +1,12 @@
 {
     "build": {
+      "development": {
+        "distribution": "internal",
+        "android": {
+          "gradleCommand": ":app:assembleDebug"
+        },
+        "ios": {}
+      },
       "preview": {
         "android": {
           "buildType": "apk",

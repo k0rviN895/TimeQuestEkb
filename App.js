@@ -41,136 +41,44 @@ const colors = {
   lightGray: '#EEEEEE'
 };
 
-const findMarkerData = (markerName) => {
-  // Перебираем все века в markersData
-  for (const century in markersData) {
-    if (markersData[century][markerName]) {
-      return {
-        name: markerName,
-        ...markersData[century][markerName],
-        century: century
-      };
-    }
-  }
-  return null;
-};
-
 // Полные данные для всех маркеров по векам с описаниями
 const markersData = {
-  "21 век": {
-    "Екатеринбург": {
-      "image": "require('./assets/21/ekb.jpg')",
-      "description": "Современный Екатеринбург - четвертый по численности населения город России. Важный административный, культурный и научно-образовательный центр Урала. Население: ~1,5 млн человек.",
-      "coordinates": [56.837803, 60.598837]
+  '21 век': {
+    'Екатеринбург': {
+      image: require('./assets/21/ekb.jpg'),
+      description: 'Современный Екатеринбург - четвертый по численности населения город России. Важный административный, культурный и научно-образовательный центр Урала. Население: ~1,5 млн человек.'
     },
-    "Храм Большой Златоуст": {
-      "image": "require('./assets/21/zlatoust.jpg')",
-      "description": "Восстановлен в 2006-2013 годах на историческом месте. Высота: 77 метров. Является одним из самых высоких православных храмов России.",
-      "coordinates": [56.834670, 60.600550]
+    'Храм Большой Златоуст': {
+      image: require('./assets/21/zlatoust.jpg'),
+      description: 'Восстановлен в 2006-2013 годах на историческом месте. Высота: 77 метров. Является одним из самых высоких православных храмов России.'
     },
-    "Уральский Федеральный Университет": {
-      "image": "require('./assets/21/urfu.jpg')",
-      "description": "Крупнейший университет Уральского региона. Создан в 2009 году путем объединения УГТУ-УПИ и УрГУ. Входит в топ-15 вузов России.",
-      "coordinates": [56.844010, 60.653917]
+    'Уральский Федеральный Университет': {
+      image: require('./assets/21/urfu.jpg'),
+      description: 'Крупнейший университет Уральского региона. Создан в 2009 году путем объединения УГТУ-УПИ и УрГУ. Входит в топ-15 вузов России.'
     },
-    "Храм-на-Крови": {
-      "image": "require('./assets/21/hram-na-krovi.jpg')",
-      "description": "Построен в 2000-2003 годах на месте дома Ипатьева, где в 1918 году была расстреляна царская семья. Высота: 60 метров.",
-      "coordinates": [56.844388, 60.609008]
+    'Храм-на-Крови': {
+      image: require('./assets/21/hram-na-krovi.jpg'),
+      description: 'Построен в 2000-2003 годах на месте дома Ипатьева, где в 1918 году была расстреляна царская семья. Высота: 60 метров.'
     },
-    "Дом Н. И. Севастьянова": {
-      "image": "require('./assets/21/sevastyanov.jpg')",
-      "description": "Памятник архитектуры федерального значения. После реставрации 2008 года - резиденция Президента РФ на Урале. Образец неоготического стиля.",
-      "coordinates": [56.839162, 60.606091]
+    'Дом Н. И. Севастьянова': {
+      image: require('./assets/21/sevastyanov.jpg'),
+      description: 'Памятник архитектуры федерального значения. После реставрации 2008 года - резиденция Президента РФ на Урале. Образец неоготического стиля.'
     },
-    "Памятник клавиатуре": {
-      "image": "require('./assets/21/keyboard.jpg')",
-      "description": "Арт-объект из бетона, созданный в 2005 году. Состоит из 104 клавиш весом от 100 до 500 кг. Площадь: 16×4 метра.",
-      "coordinates": [56.832426, 60.607557]
+    'Памятник клавиатуре': {
+      image: require('./assets/21/keyboard.jpg'),
+      description: 'Арт-объект из бетона, созданный в 2005 году. Состоит из 104 клавиш весом от 100 до 500 кг. Площадь: 16×4 метра.'
     },
-    "Ельцин Центр": {
-      "image": "require('./assets/21/elcin-center.jpg')",
-      "description": "Музей первого президента России Бориса Ельцина, открытый в 2015 году. Современный культурный центр с интерактивными экспозициями. Использует мультимедийные технологии для погружения в историю.",
-      "coordinates": [56.844835, 60.591415]
-    },
-    "Бизнес-центр \"Высоцкий\"": {
-      "image": "require('./assets/21/vysotsky.png')",
-      "description": "Самое высокое здание в Екатеринбурге (188 м), открытое в 2011 году. На верхних этажах находится смотровая площадка. Назван в честь Владимира Высоцкого.",
-      "coordinates": [56.836077, 60.614598]
-    },
-    "Екатеринбург Арена": {
-      "image": "require('./assets/21/arena.jpg')",
-      "description": "Современный футбольный стадион, построенный к Чемпионату мира по футболу 2018 года. Вместимость: 35 000 зрителей. Имеет раздвижную крышу.",
-      "coordinates": [56.8325, 60.5736]
-    },
-    "Новая набережная реки Исеть": {
-      "image": "require('./assets/21/naberezhnaya.jpg')",
-      "description": "Реконструкция набережной сделала её популярным местом для прогулок. Здесь появились новые пешеходные дорожки, зоны отдыха и арт-объекты. Имеет велодорожки.",
-      "coordinates": [56.844228, 60.594699]
-    },
-    "ТЦ \"Алатырь\"": {
-      "image": "require('./assets/21/alatyr.jpg')",
-      "description": "Один из первых крупных торговых центров города, ставший местом встреч молодежи. Здесь появились современные магазины, рестораны и развлекательные площадки. Включает кинотеатр.",
-      "coordinates": [56.832881, 60.582297]
-    },
-    "Дом Правительства Свердловской области": {
-      "image": "require('./assets/21/government.jpg')",
-      "description": "Современное административное здание правительства Свердловской области.",
-      "coordinates": [56.841821, 60.594114]
-    },
-    "Уралмаш": {
-      "image": "require('./assets/21/uralmash.png')",
-      "description": "Современное состояние одного из крупнейших машиностроительных предприятий России.",
-      "coordinates": [56.888578, 60.613591]
-    },
-    "Цирк": {
-      "image": "require('./assets/21/circus.jpeg')",
-      "description": "Современный цирк Екатеринбурга с обновленной программой и представлениями.",
-      "coordinates": [56.825904, 60.604911]
-    },
-    "Театр оперы и балета": {
-      "image": "require('./assets/21/theater.png')",
-      "description": "Современный вид одного из старейших театров города.",
-      "coordinates": [56.838880, 60.616657]
-    },
-    "Екатеринбургская плотина": {
-      "image": "require('./assets/21/dam.jpg')",
-      "description": "Современное состояние исторической плотины.",
-      "coordinates": [56.838624, 60.603383]
-    },
-    "Домики мастеровых": {
-      "image": "require('./assets/21/workers-houses.jpg')",
-      "description": "Реконструкция первых жилых домов для рабочих завода.",
-      "coordinates": [56.836044, 60.588615]
-    },
-    "Городская управа": {
-      "image": "require('./assets/21/city-hall.jpg')",
-      "description": "Современное здание городской администрации.",
-      "coordinates": [56.837257, 60.597623]
-    },
-    "Первая церковь": {
-      "image": "require('./assets/21/church.jpg')",
-      "description": "Место первой церкви города в современном виде.",
-      "coordinates": [56.838352, 60.607489]
-    },
-    "Первая школа": {
-      "image": "require('./assets/21/school.jpg')",
-      "description": "Место первой школы города в современном виде.",
-      "coordinates": [56.838432, 60.571633]
-    },
-    "Мемориал на площади 1905 года": {
-      "image": "require('./assets/logo.png')",
-      "description": "Современный вид мемориала на главной площади города.",
-      "coordinates": [56.837831, 60.596339]
-    },
-    "Парк Маяковского": {
-      "image": "require('./assets/21/park.jpg')",
-      "description": "Современный парк культуры и отдыха с аттракционами и зонами для отдыха.",
-      "coordinates": [56.8450, 60.6250]
-    },
-    "Детская Свердловская железная дорога": {
+    'Ельцин Центр': {
       image: require('./assets/logo.png'),
-      description: "Детская железная дорога в современном виде."
+      description: 'Музей первого президента России Бориса Ельцина, открытый в 2015 году. Современный культурный центр с интерактивными экспозициями.'
+    },
+    'Бизнес-центр "Высоцкий"': {
+      image: require('./assets/logo.png'),
+      description: 'Самое высокое здание в Екатеринбурге (188 м), открытое в 2011 году. На верхних этажах находится смотровая площадка.'
+    },
+    'Екатеринбург Арена': {
+      image: require('./assets/logo.png'),
+      description: 'Современный футбольный стадион, построенный к Чемпионату мира по футболу 2018 года. Вместимость: 35 000 зрителей.'
     }
   },
   '20 век': {
@@ -1073,35 +981,8 @@ const quizData = {
   ]
 };
 
-// Компонент карты
-const Map = () => {
-  return (
-    <View style={{ flex: 1 }}>
-      <WebView
-        ref={webViewRef}
-        source={require('./map.html')}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-        geolocationEnabled={true}
-        onMessage={(event) => {
-          try {
-            const message = JSON.parse(event.nativeEvent.data);
-            console.log('Получено из карты:', message);
 
-            const fullMarkerData = findMarkerData(message.name);
-            if (fullMarkerData) {
-              handleMarkerPress(fullMarkerData.name); // Это откроет панель
-            } else {
-              Alert.alert('Ошибка', 'Данные о выбранной точке не найдены');
-            }
-          } catch (e) {
-            console.error('Ошибка парсинга сообщения:', e);
-          }
-        }}
-      />
-    </View>
-  );
-};
+
 
 // Компонент элемента статистики
 const StatItem = ({ value, label }) => (
@@ -1158,6 +1039,8 @@ const QuizQuestion = ({ question, options, selectedAnswer, onAnswerSelect }) => 
     </View>
   );
 };
+
+
 
 // Компонент результатов викторины
 const QuizResults = ({ score, totalQuestions, onClose }) => {
@@ -1311,6 +1194,56 @@ export default function App() {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const profileAnim = useRef(new Animated.Value(height)).current;
   const quizAnim = useRef(new Animated.Value(height)).current;
+  const webViewRef = useRef(null);
+
+  // Компонент карты
+  const Map = () => {
+    const webViewRef = useRef(null);
+    return (
+      <View style={{ flex: 1 }}>
+        <WebView
+          ref={webViewRef}
+          source={require('./map.html')}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          geolocationEnabled={true}
+          injectedJavaScript={`(function () {
+            window.addEventListener('message', function(e) {
+              console.log('Получено в HTML:', e.data);
+              // Принудительно отправляем в React Native
+              if (window.ReactNativeWebView && e.data) {
+                window.ReactNativeWebView.postMessage(e.data);
+              }
+            });
+          })();
+          true;`}
+          onMessage={(event) => {
+            try {
+              const message = JSON.parse(event.nativeEvent.data);
+              if (message.name) {
+                const decodedName = decodeURIComponent(message.name);
+                handleMarkerPress(decodedName);
+              }
+
+            } catch (e) {
+              console.error('Ошибка парсинга сообщения:', e);
+            }
+          }}
+        />
+      </View>
+    );
+  };
+
+  // Обработчик нажатия на маркер
+  const handleMarkerPress = (markerName) => {
+    setSelectedMarker(markerName);
+    setShowMarkerPanel(true);
+    Animated.timing(slideAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
 
   // Функции для обработки авторизации
   const handleAuthInputChange = (field, value) => {
@@ -1344,16 +1277,6 @@ export default function App() {
     setAuthError('');
   };
 
-  // Обработчик нажатия на маркер
-  const handleMarkerPress = (markerName) => {
-    setSelectedMarker(markerName);
-    setShowMarkerPanel(true);
-    Animated.timing(slideAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  };
 
   // Закрытие панели маркера
   const closeMarkerPanel = () => {

@@ -2,403 +2,1088 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Карта Екатеринбурга с маршрутами</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Карта Екатеринбурга с маршрутами и викториной</title>
   <style>
     html, body {
       width: 100%;
       height: 100%;
       margin: 0;
       padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #F5F5F5;
     }
+    
     #map {
       width: 100%;
       height: 100%;
     }
-    .route-button {
-      background-color: #f9db24;
-      border: none;
-      color: black;
-      padding: 8px 12px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
+    
+    /* Общие стили для кнопок */
+    button {
       font-size: 14px;
-      margin: 4px 2px;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    #locationPrompt {
-      z-index: 9999; /* Убедитесь, что модальное окно выше всего */
-    }
-    #locationPrompt button {
-      margin-top: 10px;
-      padding: 8px 16px;
-      background-color: #007bff;
-      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
       border: none;
-      border-radius: 4px;
       cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    #locationPrompt button:hover {
-      background-color: #0056b3;
+    
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .route-button {
+      background-color: #4CAF50;
+      color: white;
+      margin: 5px;
+      display: inline-block;
+      width: calc(100% - 10px);
+      text-align: center;
+    }
+    
+    /* Стили для информационного окна */
+    .info-window {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 10000;
+      display: none;
+      overflow-y: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    
+    .info-window-content {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .info-window-header {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #212121;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #E0E0E0;
+    }
+    
+    .info-window-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+    
+    .centuries-container {
+      margin-bottom: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    
+    .info-window-century {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      color: white;
+    }
+    
+    .info-window-description {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 15px;
+    }
+    
+    .fact-item {
+      margin-bottom: 10px;
+      padding-left: 15px;
+      position: relative;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .fact-item:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #4CAF50;
+      font-weight: bold;
+    }
+    
+    .info-window-close {
+      align-self: flex-end;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    
+    .info-window-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 9999;
+      display: none;
+    }
+    
+    /* Стили для викторины */
+    .quiz-window {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 10000;
+      display: none;
+      overflow-y: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    
+    .quiz-header {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #212121;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #E0E0E0;
+      text-align: center;
+    }
+    
+    .quiz-question {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    
+    .quiz-options {
+      margin-bottom: 20px;
+    }
+    
+    .quiz-option {
+      display: block;
+      margin-bottom: 10px;
+      padding: 12px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 1px solid #E0E0E0;
+    }
+    
+    .quiz-option:hover {
+      background-color: #e9e9e9;
+    }
+    
+    .quiz-option.correct {
+      background-color: #C8E6C9;
+      border-color: #4CAF50;
+    }
+    
+    .quiz-option.incorrect {
+      background-color: #FFCDD2;
+      border-color: #F44336;
+    }
+    
+    .quiz-result {
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 15px;
+      text-align: center;
+      display: none;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    
+    .quiz-result.correct {
+      background-color: #C8E6C9;
+      color: #2E7D32;
+    }
+    
+    .quiz-result.incorrect {
+      background-color: #FFCDD2;
+      color: #C62828;
+    }
+    
+    .quiz-next {
+      display: none;
+      margin: 15px auto 0;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      font-weight: 600;
+    }
+    
+    .quiz-close {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #757575;
+      color: white;
+      font-weight: 600;
+      display: block;
+      width: 100%;
+    }
+    
+    /* Элементы управления картой */
+    #centurySelector {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background-color: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    #resetControl {
+      position: absolute;
+      bottom: 40px;
+      left: 10px;
+      z-index: 1000;
+    }
+    
+    #quizControl {
+      position: absolute;
+      bottom: 80px;
+      right: 10px;
+      z-index: 1000;
+    }
+    
+    #legend {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+      width: 160px;
+      font-size: 12px;
+    }
+    
+    select {
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #E0E0E0;
+      cursor: pointer;
+      background-color: white;
+      min-width: 150px;
+    }
+    
+    /* Адаптивные стили */
+    @media (max-width: 480px) {
+      .info-window, .quiz-window {
+        width: 95%;
+        padding: 15px;
+      }
+      
+      .info-window-header {
+        font-size: 20px;
+      }
+      
+      .info-window-image {
+        height: 150px;
+      }
+      
+      #centurySelector, #quizControl {
+        bottom: 70px;
+      }
+      
+      #resetControl {
+        bottom: 30px;
+      }
     }
   </style>
 </head>
 <body>
-
-<!-- Контейнер карты -->
-<div id="map"></div>
-
-<!-- Выбор века — по центру снизу -->
-<div id="centurySelector" style="
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  background-color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-">
-  <select id="centuryFilter" onchange="applyCenturyFilter()" style="
-    font-size: 14px;
-    padding: 6px 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  ">
-    <option value="">Все эпохи</option>
-    <option value="18">XVIII век</option>
-    <option value="19">XIX век</option>
-    <option value="20">XX век</option>
-    <option value="21">XXI век</option>
-  </select>
-</div>
-
-<!-- Кнопка сброса — слева снизу -->
-<div id="resetControl" style="
-  position: absolute;
-  bottom: 40px;
-  left: 10px;
-  z-index: 1000;
-">
-  <button onclick="resetUserLocation()" style="
-    padding: 6px 12px;
-    background-color: #e7e7e7;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #333;
-  ">Сбросить местоположение</button>
-</div>
-
-<div id="legend" style="
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  font-family: sans-serif;
-  z-index: 1000;
-  width: 160px;
-">
-  <strong>Легенда:</strong><br>
-  <span style="color: #0000FF;">●</span> XVIII век<br>
-  <span style="color: #008000;">●</span> XIX век<br>
-  <span style="color: #FFA500;">●</span> XX век<br>
-  <span style="color: #FF0000;">●</span> XXI век<br>
-</div>
-
-<!-- Подключение API Яндекс.Карт -->
-<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=cc2edfda-deef-47d7-a963-5853ae3beb53"></script>
-
-<!-- Скрипт карты -->
-<script>
-
-  function showLocationPrompt() {
-    document.getElementById('locationPrompt').style.display = 'block';
-  }
-
-  function closeLocationPrompt() {
-    document.getElementById('locationPrompt').style.display = 'none';
-  }
-  var myMap;
-  var userPosition = null;
-  var currentRoute = null;
-  var userPlacemark = null;
-  var userLocationSet = false; // Флаг — выбрано ли местоположение
-
-  const centuryColors = {
-    18: '#0000FF', // Синий — XVIII век
-    19: '#008000', // Зелёный — XIX век
-    20: '#FFA500', // Оранжевый — XX век
-    21: '#FF0000'  // Красный — XXI век
-  };
-
-  function resetUserLocation() {
+  <!-- Информационное окно -->
+  <div id="infoOverlay" class="info-window-overlay"></div>
+  <div id="infoWindow" class="info-window">
+    <div class="info-window-content">
+      <div class="info-window-header" id="infoWindowTitle"></div>
+      <img class="info-window-image" id="infoWindowImage" src="" alt="">
+      <div class="centuries-container" id="infoWindowCenturies"></div>
+      <div class="info-window-description" id="infoWindowDescription"></div>
+      <button class="info-window-close" onclick="closeInfoWindow()">Закрыть</button>
+    </div>
+  </div>
+  
+  <!-- Окно викторины -->
+  <div id="quizOverlay" class="info-window-overlay"></div>
+  <div id="quizWindow" class="quiz-window">
+    <div class="quiz-header" id="quizTitle">Викторина</div>
+    <div class="quiz-question" id="quizQuestion"></div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-result" id="quizResult"></div>
+    <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Следующий вопрос</button>
+    <button class="quiz-close" onclick="closeQuiz()">Закрыть</button>
+  </div>
+  
+  <!-- Контейнер карты -->
+  <div id="map"></div>
+  
+  <!-- Выбор века -->
+  <div id="centurySelector">
+    <select id="centuryFilter" onchange="applyCenturyFilter()">
+      <option value="">Все эпохи</option>
+      <option value="18">XVIII век</option>
+      <option value="19">XIX век</option>
+      <option value="20">XX век</option>
+      <option value="21">XXI век</option>
+    </select>
+  </div>
+  
+  <!-- Кнопка сброса -->
+  <div id="resetControl">
+    <button onclick="resetUserLocation()" style="background-color: #757575; color: white;">Сбросить местоположение</button>
+  </div>
+  
+  <!-- Кнопка викторины -->
+  <div id="quizControl">
+    <button onclick="showQuizSelector()" style="background-color: #4CAF50; color: white;">Викторина</button>
+  </div>
+  
+  <!-- Легенда -->
+  <div id="legend">
+    <strong>Легенда:</strong><br>
+    <span style="color: #0000FF;">●</span> XVIII век<br>
+    <span style="color: #008000;">●</span> XIX век<br>
+    <span style="color: #FFA500;">●</span> XX век<br>
+    <span style="color: #FF0000;">●</span> XXI век<br>
+  </div>
+  
+  <!-- Подключение API Яндекс.Карт -->
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=cc2edfda-deef-47d7-a963-5853ae3beb53"></script>
+  
+  <!-- Скрипт карты -->
+  <script>
+    // Функции для работы с информационным окном
+    function showInfoWindow(title, imageUrl, centuries, description, facts) {
+      document.getElementById('infoWindowTitle').textContent = title;
+      document.getElementById('infoWindowImage').src = imageUrl;
+      document.getElementById('infoWindowImage').alt = title;
+      
+      let descHtml = `<p>${description}</p>`;
+      
+      if (facts && facts.length > 0) {
+        descHtml += '<h4 style="margin-top: 15px; margin-bottom: 5px; font-size: 16px;">Интересные факты:</h4>';
+        facts.forEach(fact => {
+          descHtml += `<div class="fact-item">${fact}</div>`;
+        });
+      }
+      
+      document.getElementById('infoWindowDescription').innerHTML = descHtml;
+      
+      const centuriesContainer = document.getElementById('infoWindowCenturies');
+      centuriesContainer.innerHTML = '';
+      
+      centuries.forEach(century => {
+        const centurySpan = document.createElement('span');
+        centurySpan.className = 'info-window-century';
+        centurySpan.textContent = getCenturyName(century);
+        centurySpan.style.backgroundColor = getCenturyColor(century);
+        centuriesContainer.appendChild(centurySpan);
+      });
+      
+      document.getElementById('infoOverlay').style.display = 'block';
+      document.getElementById('infoWindow').style.display = 'block';
+    }
+    
+    function closeInfoWindow() {
+      document.getElementById('infoOverlay').style.display = 'none';
+      document.getElementById('infoWindow').style.display = 'none';
+    }
+    
+    function getCenturyName(century) {
+      switch(century) {
+        case 18: return 'XVIII век';
+        case 19: return 'XIX век';
+        case 20: return 'XX век';
+        case 21: return 'XXI век';
+        default: return '';
+      }
+    }
+    
+    function getCenturyColor(century) {
+      switch(century) {
+        case 18: return '#0000FF';
+        case 19: return '#008000';
+        case 20: return '#FFA500';
+        case 21: return '#FF0000';
+        default: return '#777777';
+      }
+    }
+    
+    // Функции для работы с викториной
+    const quizzes = {
+      18: {
+        title: "Викторина: XVIII век",
+        questions: [
+          {
+            question: "Какое гидротехническое сооружение стало основой для работы первого металлургического завода Екатеринбурга?",
+            options: [
+              "Дамба на реке Чусовая",
+              "Екатеринбургская плотина",
+              "Верх-Исетский пруд"
+            ],
+            answer: 1
+          },
+          {
+            question: "Когда был основан первый металлургический завод Екатеринбурга?",
+            options: [
+              "1703 год",
+              "1723 год",
+              "1750 год"
+            ],
+            answer: 1
+          },
+          {
+            question: "Какую роль выполняла Екатеринбургская плотина помимо обеспечения энергией завода?",
+            options: [
+              "Служила мостом и мельницей",
+              "Была местом отдыха горожан",
+              "Использовалась как торговая площадка"
+            ],
+            answer: 0
+          },
+          {
+            question: "Что производили на первом металлургическом заводе Екатеринбурга?",
+            options: [
+              "Ткани и одежду",
+              "Железо, чугун и пушки",
+              "Деревянные изделия"
+            ],
+            answer: 1
+          },
+          {
+            question: "Как назывались первые жилые дома, построенные для рабочих завода?",
+            options: [
+              "Домики мастеровых",
+              "Купеческие усадьбы",
+              "Крестьянские избы"
+            ],
+            answer: 0
+          }
+        ]
+      },
+      19: {
+        title: "Викторина: XIX век",
+        questions: [
+          {
+            question: "Как называется знаменитый дом в стиле классицизма, символизирующий богатство купечества?",
+            options: [
+              "Дом Севастьянова",
+              "Дом Правительства",
+              "Дом Меценатов"
+            ],
+            answer: 0
+          },
+          {
+            question: "Когда был построен Дом Севастьянова?",
+            options: [
+              "1845 год",
+              "1865 год",
+              "1885 год"
+            ],
+            answer: 1
+          },
+          {
+            question: "Какой театр стал первым стационарным театром Екатеринбурга?",
+            options: [
+              "Театр оперы и балета",
+              "Драматический театр",
+              "Народный театр"
+            ],
+            answer: 0
+          },
+          {
+            question: "Сколько зрителей мог вместить Екатеринбургский театр оперы и балета до реконструкции?",
+            options: [
+              "До 500 человек",
+              "До 800 человек",
+              "До 1000 человек"
+            ],
+            answer: 1
+          },
+          {
+            question: "Какое здание стало центром торговли в 19 веке?",
+            options: [
+              "Торговые ряды",
+              "Рынок",
+              "Базар"
+            ],
+            answer: 0
+          }
+        ]
+      },
+      20: {
+        title: "Викторина: XX век",
+        questions: [
+          {
+            question: "Какое здание стало символом советской власти в Екатеринбурге?",
+            options: [
+              "Дом Правительства Свердловской области",
+              "Дом Советов",
+              "Дом Красной Армии"
+            ],
+            answer: 0
+          },
+          {
+            question: "Какой стиль архитектуры характерен для Дома Правительства?",
+            options: [
+              "Конструктивизм",
+              "Классицизм",
+              "Барокко"
+            ],
+            answer: 0
+          },
+          {
+            question: "Какой вуз стал кузницей кадров для Урала?",
+            options: [
+              "Уральский политехнический институт",
+              "Уральский государственный университет",
+              "Уральский медицинский университет"
+            ],
+            answer: 0
+          },
+          {
+            question: "Какой завод выпускал танки во время Великой Отечественной войны?",
+            options: [
+              "Завод Уралмаш",
+              "Завод имени Кирова",
+              "Завод имени Ленина"
+            ],
+            answer: 0
+          },
+          {
+            question: "Какой парк стал любимым местом прогулок горожан?",
+            options: [
+              "Парк Маяковского",
+              "Центральный парк",
+              "Городской сад"
+            ],
+            answer: 0
+          }
+        ]
+      },
+      21: {
+        title: "Викторина: XXI век",
+        questions: [
+          {
+            question: "Какое здание стало самым высоким в Екатеринбурге?",
+            options: [
+              "Бизнес-центр \"Высоцкий\"",
+              "Дом Правительства",
+              "Дом Советов"
+            ],
+            answer: 0
+          },
+          {
+            question: "Какой музей рассказывает о жизни первого президента России?",
+            options: [
+              "Ельцин Центр",
+              "Музей истории города",
+              "Музей современного искусства"
+            ],
+            answer: 0
+          },
+          {
+            question: "Какой стадион был построен к Чемпионату мира по футболу 2018 года?",
+            options: [
+              "Екатеринбург Арена",
+              "Центральный стадион",
+              "Лужники"
+            ],
+            answer: 0
+          },
+          {
+            question: "Какой парк стал популярным местом для прогулок благодаря реконструкции?",
+            options: [
+              "Новая набережная реки Исеть",
+              "Парк Маяковского",
+              "Городской сад"
+            ],
+            answer: 0
+          },
+          {
+            question: "Какой торговый центр стал первым крупным ТЦ в городе?",
+            options: [
+              "ТЦ \"Алатырь\"",
+              "ТЦ \"Мегаполис\"",
+              "ТЦ \"Глобус\""
+            ],
+            answer: 0
+          }
+        ]
+      }
+    };
+    
+    let currentQuiz = null;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    
+    function showQuizSelector() {
+      const quizSelect = document.createElement('div');
+      quizSelect.style.position = 'fixed';
+      quizSelect.style.top = '50%';
+      quizSelect.style.left = '50%';
+      quizSelect.style.transform = 'translate(-50%, -50%)';
+      quizSelect.style.backgroundColor = 'white';
+      quizSelect.style.padding = '20px';
+      quizSelect.style.borderRadius = '16px';
+      quizSelect.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+      quizSelect.style.zIndex = '10000';
+      quizSelect.style.width = '90%';
+      quizSelect.style.maxWidth = '400px';
+      
+      quizSelect.innerHTML = `
+        <h3 style="margin-top: 0; margin-bottom: 15px; text-align: center;">Выберите викторину</h3>
+        <button onclick="startQuiz(18)" style="display: block; width: 100%; margin-bottom: 10px; background-color: #0000FF; color: white; padding: 12px;">XVIII век</button>
+        <button onclick="startQuiz(19)" style="display: block; width: 100%; margin-bottom: 10px; background-color: #008000; color: white; padding: 12px;">XIX век</button>
+        <button onclick="startQuiz(20)" style="display: block; width: 100%; margin-bottom: 10px; background-color: #FFA500; color: white; padding: 12px;">XX век</button>
+        <button onclick="startQuiz(21)" style="display: block; width: 100%; margin-bottom: 10px; background-color: #FF0000; color: white; padding: 12px;">XXI век</button>
+        <button onclick="document.body.removeChild(this.parentNode)" style="display: block; width: 100%; margin-top: 10px; background-color: #757575; color: white; padding: 12px;">Отмена</button>
+      `;
+      
+      document.body.appendChild(quizSelect);
+    }
+    
+    function startQuiz(century) {
+      document.body.querySelector('div')?.remove();
+      currentQuiz = quizzes[century];
+      currentQuestionIndex = 0;
+      score = 0;
+      showQuestion();
+      document.getElementById('quizOverlay').style.display = 'block';
+      document.getElementById('quizWindow').style.display = 'block';
+    }
+    
+    function showQuestion() {
+      if (!currentQuiz || currentQuestionIndex >= currentQuiz.questions.length) {
+        endQuiz();
+        return;
+      }
+      
+      const question = currentQuiz.questions[currentQuestionIndex];
+      document.getElementById('quizTitle').textContent = currentQuiz.title;
+      document.getElementById('quizQuestion').textContent = question.question;
+      
+      const optionsContainer = document.getElementById('quizOptions');
+      optionsContainer.innerHTML = '';
+      
+      question.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'quiz-option';
+        optionElement.textContent = option;
+        optionElement.onclick = () => selectAnswer(index);
+        optionsContainer.appendChild(optionElement);
+      });
+      
+      document.getElementById('quizResult').style.display = 'none';
+      document.getElementById('quizNext').style.display = 'none';
+    }
+    
+    function selectAnswer(selectedIndex) {
+      const question = currentQuiz.questions[currentQuestionIndex];
+      const options = document.querySelectorAll('.quiz-option');
+      
+      options.forEach((option, index) => {
+        option.style.pointerEvents = 'none';
+        if (index === question.answer) {
+          option.classList.add('correct');
+        } else if (index === selectedIndex && index !== question.answer) {
+          option.classList.add('incorrect');
+        }
+      });
+      
+      const resultElement = document.getElementById('quizResult');
+      if (selectedIndex === question.answer) {
+        score++;
+        resultElement.textContent = 'Правильно!';
+        resultElement.className = 'quiz-result correct';
+      } else {
+        resultElement.textContent = 'Неправильно!';
+        resultElement.className = 'quiz-result incorrect';
+      }
+      
+      resultElement.style.display = 'block';
+      document.getElementById('quizNext').style.display = 'block';
+    }
+    
+    function nextQuestion() {
+      currentQuestionIndex++;
+      showQuestion();
+    }
+    
+    function endQuiz() {
+      document.getElementById('quizQuestion').textContent = `Викторина завершена! Ваш результат: ${score} из ${currentQuiz.questions.length}`;
+      document.getElementById('quizOptions').innerHTML = '';
+      document.getElementById('quizNext').style.display = 'none';
+    }
+    
+    function closeQuiz() {
+      document.getElementById('quizOverlay').style.display = 'none';
+      document.getElementById('quizWindow').style.display = 'none';
+    }
+    
+    // Функции для работы с картой
+    var myMap;
+    var userPosition = null;
+    var currentRoute = null;
+    var userPlacemark = null;
+    var userLocationSet = false;
+    
+    ymaps.ready(init);
+    
+    function init() {
+      myMap = new ymaps.Map("map", {
+        center: [56.838011, 60.597465],
+        zoom: 12,
+        controls: []
+      }, {
+        restrictMapArea: [
+          [56.677354, 60.194179],
+          [57.046116, 61.070928]
+        ]
+      });
+      
+      const centuryPresets = {
+        18: 'islands#blueIcon',
+        19: 'islands#greenIcon',
+        20: 'islands#orangeIcon',
+        21: 'islands#redIcon'
+      };
+      
+      function getIconPreset(centuries) {
+        if (!centuries || centuries.length === 0) return 'islands#grayIcon';
+        const priorityCentury = centuries.sort((a, b) => a - b)[0];
+        return centuryPresets[priorityCentury] || 'islands#grayIcon';
+      }
+      
+      window.markersData = [
+        {
+          name: 'Екатеринбургская плотина',
+          coords: [56.838624, 60.603383],
+          centuries: [18,19,20,21],
+          image: './assets/18/dam.png',
+          description: 'Плотина была построена по личному указу Петра I в рамках программы освоения Урала. Она стала первым гидротехническим сооружением на Урале и основой для работы металлургического завода.',
+          facts: [
+            'Длина плотины — 92 метра',
+            'Строилась силами крепостных рабочих под руководством инженера Вильгельма де Геннена',
+            'Пережила несколько реконструкций, но сохранила свою историческую значимость'
+          ]
+        },
+        {
+          name: 'Екатеринбургский завод',
+          coords: [56.839892, 60.555582],
+          centuries: [18,19,20,21],
+          image: './assets/18/factory.png',
+          description: 'Первый металлургический завод был основан как часть Выйско-Шайтанского горного округа. Он стал крупнейшим предприятием Урала, производившим железо, чугун и пушки для русской армии.',
+          facts: [
+            'Производил металлические изделия для всей России',
+            'Имел собственные рудники в окрестностях Екатеринбурга',
+            'Работал по передовым технологиям того времени, заимствованным из Европы'
+          ]
+        },
+        {
+          name: 'Домики мастеровых',
+          coords: [56.836044, 60.588615],
+          centuries: [18,19,20,21],
+          image: './assets/21/workers-houses.jpg',
+          description: 'Эти простые деревянные дома были построены для рабочих завода и их семей. Они стали первыми жилыми постройками города и формировали его первые улицы-ряды.',
+          facts: [
+            'Стены толщиной до 50 см для защиты от холода',
+            'Имели печное отопление и небольшие окна',
+            'Формировали первые улицы-ряды'
+          ]
+        },
+        {
+          name: 'Городская управа',
+          coords: [56.837257, 60.597623],
+          centuries: [18,19,20,21],
+          image: './assets/20/city-hall.jpg',
+          description: 'Городская управа была первым административным центром Екатеринбурга. Здесь принимались важные решения о развитии города, управлении заводами и решении конфликтов между жителями.',
+          facts: [
+            'Деревянное здание с простыми украшениями',
+            'Охранялось казаками для поддержания порядка',
+            'Здесь решались вопросы торговли и налогов'
+          ]
+        },
+        {
+          name: 'Первая церковь',
+          coords: [56.838352, 60.607489],
+          centuries: [18,19,20,21],
+          image: './assets/20/church.jpg',
+          description: 'Первая церковь в Екатеринбурге была построена на пожертвования местных жителей. Она стала духовным центром города и местом проведения богослужений.',
+          facts: [
+            'Имела один престол и колокольню',
+            'Богослужения проводились ежедневно',
+            'Позже стала центром культурной жизни'
+          ]
+        },
+        {
+          name: 'Первая школа',
+          coords: [56.838432, 60.571633],
+          centuries: [18,19,20,21],
+          image: './assets/20/school.jpg',
+          description: 'Первая школа Екатеринбурга была основана в 1724 году по распоряжению Вильгельма де Геннина при Екатеринбургском заводе. Она стала первым образовательным учреждением города.',
+          facts: [
+            'Это первое официальное учебное заведение Екатеринбурга',
+            'Использовались простые учебники',
+            'Школа находилась при заводе'
+          ]
+        },
+        {
+          name: 'Дом Севастьянова',
+          coords: [56.839162, 60.606091],
+          centuries: [19,20,21],
+          image: './assets/19/sevastyanov.jpg',
+          description: 'Дом Севастьянова был построен в стиле классицизма как символ богатства и влияния екатеринбургского купечества. Он принадлежал купцу Александру Севастьянову.',
+          facts: [
+            'Имеет два фасада: парадный и хозяйственный',
+            'Украшен колоннами и лепниной',
+            'Позже стал зданием городской думы'
+          ]
+        },
+        {
+          name: 'Театр оперы и балета',
+          coords: [56.838880, 60.616657],
+          centuries: [19,20,21],
+          image: './assets/19/theater.jpg',
+          description: 'Театр был открыт как первый стационарный театр города. Он стал центром культурной жизни Екатеринбурга и принимал спектакли и концерты.',
+          facts: [
+            'Вмещал до 800 зрителей',
+            'Театр получил прозвище «Белый лебедь» за свою изящную архитектуру',
+            'Пережил пожар и реконструкцию'
+          ]
+        },
+        {
+          name: 'Дом Правительства Свердловской области',
+          coords: [56.888578, 60.613591],
+          centuries: [20,21],
+          image: './assets/20/government.jpg',
+          description: 'Здание было построено в стиле конструктивизма как символ советской власти. Оно стало центром управления регионом и местом принятия важнейших решений.',
+          facts: [
+            'Имеет характерные черты конструктивизма — строгие линии, минимализм',
+            'Во время войны здесь принимались решения о мобилизации',
+            'Сохранил исторические интерьеры'
+          ]
+        },
+        {
+          name: 'Завод Уралмаш',
+          coords: [56.888578, 60.613591],
+          centuries: [20,21],
+          image: './assets/20/uralmash.jpg',
+          description: 'Один из крупнейших машиностроительных заводов СССР, основанный в 1933 и сыгравший ключевую роль в индустриализации страны.',
+          facts: [
+            'Производил танки Т-34',
+            'Имел собственные школы, больницы и клубы',
+            'Формировал социальную инфраструктуру района'
+          ]
+        },
+        {
+          name: 'Екатеринбургский цирк',
+          coords: [56.825904, 60.604911],
+          centuries: [20,21],
+          image: './assets/20/circus.jpg',
+          description: 'Первый стационарный цирк в городе, ставший центром культурной жизни. Цирк вмещает до 2000 зрителей и принимает выступления известных артистов.',
+          facts: [
+            'Имеет уникальную архитектуру в виде купола',
+            'Цирк носит имя народного артиста СССР, дрессировщика Валентина Филатова',
+            'Имеет современное оборудование для представлений'
+          ]
+        },
+        {
+          name: 'Парк Маяковского',
+          coords: [56.8450, 60.6250],
+          centuries: [20,21],
+          image: './assets/20/park.jpg',
+          description: 'Один из первых общественных парков отдыха, созданных для горожан. Парк назван в честь поэта Владимира Маяковского и стал любимым местом для прогулок.',
+          facts: [
+            'Имел аттракционы и летний кинотеатр',
+            'Назван в честь поэта Владимира Маяковского',
+            'В 1963 году у центрального входа открылся планетарий'
+          ]
+        },
+        {
+          name: 'Ельцин Центр',
+          coords: [56.844835, 60.591415],
+          centuries: [21],
+          image: './assets/logo.png',
+          description: 'Музей первого президента России Бориса Ельцина, рассказывающий о его жизни и деятельности. Центр использует современные мультимедийные технологии.',
+          facts: [
+            'Использует интерактивные технологии для рассказа об истории',
+            'Имеет обширный архив документов',
+            'Стал новым культурным пространством'
+          ]
+        },
+        {
+          name: 'Бизнес-центр "Высоцкий"',
+          coords: [56.836077, 60.614598],
+          centuries: [21],
+          image: './assets/logo.png',
+          description: 'Самое высокое здание в Екатеринбурге, названное в честь Владимира Высоцкого. Башня сочетает офисы, жилые помещения и торговые площади.',
+          facts: [
+            'Высота — 188 метров',
+            'Имеет смотровую площадку с видом на город',
+            'Сочетает офисы, жилье и торговые площади'
+          ]
+        },
+        {
+          name: 'Екатеринбург Арена',
+          coords: [56.8325, 60.5736],
+          centuries: [21],
+          image: './assets/20/arena.jpg',
+          description: 'Современный футбольный стадион, построенный к Чемпионату мира по футболу 2018 года. Арена вмещает до 35 000 зрителей и имеет раздвижную крышу.',
+          facts: [
+            'Имеет раздвижную крышу',
+            'Сохранила историческую стену старого стадиона',
+            'Принимает матчи и концерты'
+          ]
+        },
+        {
+          name: 'Новая набережная реки Исеть',
+          coords: [56.844228, 60.594699],
+          centuries: [21],
+          image: './assets/20/naberezhnaya.jpg',
+          description: 'Реконструкция набережной сделала её популярным местом для прогулок. Здесь появились новые пешеходные дорожки, зоны отдыха и арт-объекты.',
+          facts: [
+            'Имеет велодорожки и зоны отдыха',
+            'Украшена арт-объектами',
+            'Популярное место для фотосессий'
+          ]
+        },
+        {
+          name: 'ТЦ "Алатырь"',
+          coords: [56.832881, 60.582297],
+          centuries: [21],
+          image: './assets/20/alatyr.jpg',
+          description: 'Один из первых крупных торговых центров города, ставший местом встреч молодежи. Здесь появились современные магазины, рестораны и развлекательные площадки.',
+          facts: [
+            'Имеет многоуровневую структуру',
+            'Популярное место для шопинга и отдыха',
+            'Включает кинотеатр и детские площадки'
+          ]
+        }
+      ];
+      
+      window.placemarks = [];
+      
+      markersData.forEach(item => {
+        const preset = getIconPreset(item.centuries);
+        const placemark = new ymaps.Placemark(
+          item.coords,
+          {
+            balloonContentHeader: item.name,
+            balloonContentBody: `
+              <button class="route-button" onclick="buildRouteTo(${item.coords[0]}, ${item.coords[1]})">Построить маршрут</button>
+              <button class="route-button" onclick="showInfoWindow('${item.name}', '${item.image}', [${item.centuries}], '${item.description}', ${JSON.stringify(item.facts || [])})">Узнать подробнее</button>
+            `,
+            balloonContentFooter: '',
+            centuries: item.centuries
+          },
+          {
+            preset: preset
+          }
+        );
+        
+        placemark.events.add('click', function() {
+          showInfoWindow(item.name, item.image, item.centuries, item.description, item.facts);
+        });
+        
+        placemarks.push(placemark);
+        myMap.geoObjects.add(placemark);
+      });
+      
+      window.applyCenturyFilter = function() {
+        const selectedCentury = document.getElementById('centuryFilter').value;
+        placemarks.forEach(placemark => {
+          const pointCenturies = placemark.properties.get('centuries') || [];
+          if (!selectedCentury || pointCenturies.includes(parseInt(selectedCentury))) {
+            myMap.geoObjects.add(placemark);
+          } else {
+            myMap.geoObjects.remove(placemark);
+          }
+        });
+      };
+      
+      myMap.events.add('click', function(e) {
+        if (userLocationSet) return;
+        
+        const coords = e.get('coords');
+        if (userPlacemark) {
+          myMap.geoObjects.remove(userPlacemark);
+        }
+        
+        userPlacemark = new ymaps.Placemark(coords, {
+          balloonContent: 'Вы здесь'
+        }, {
+          preset: 'islands#blackIcon'
+        });
+        
+        myMap.geoObjects.add(userPlacemark);
+        myMap.setCenter(coords, 15);
+        userPosition = coords;
+        userLocationSet = true;
+      });
+    }
+    
+    function resetUserLocation() {
       if (userPlacemark) {
         myMap.geoObjects.remove(userPlacemark);
         userPlacemark = null;
       }
-
       userPosition = null;
       userLocationSet = false;
-
-      // Вернуть карту к начальному виду (по желанию)
       myMap.setCenter([56.838011, 60.597465], 12);
-
-      alert("Выберите новое местоположение на карте.");
     }
-
-  ymaps.ready(init);
-
-  function init() {
-    // --- Инициализация карты ---
-    myMap = new ymaps.Map("map", {
-      center: [56.838011, 60.597465],
-      zoom: 12,
-      controls: []
-    }, {
-      restrictMapArea: [
-        [56.677354, 60.194179],
-        [57.046116, 61.070928]
-      ]
-    });
-
-    const centuryPresets = {
-      18: 'islands#blueIcon',     // XVIII век — синий
-      19: 'islands#greenIcon',    // XIX век — зелёный
-      20: 'islands#orangeIcon',   // XX век — оранжевый
-      21: 'islands#redIcon'       // XXI век — красный
-    };
-
-    function getIconPreset(centuries) {
-      if (!centuries || centuries.length === 0) return 'islands#grayIcon'; // Неизвестный век — серый
-
-      const priorityCentury = centuries.sort((a, b) => a - b)[0];
-      return centuryPresets[priorityCentury] || 'islands#grayIcon';
-    }
-
-    window.markersData = [
-      {
-        name: 'Горный университет',
-        coords: [59.929272, 30.269435],
-        centuries: [19,20,21]
-      },
-      {
-        name: 'Храм Вознесения Господня',
-        coords: [56.844763, 60.612628],
-        centuries: [19,20,21]
-      },
-      {
-        name: 'Усадьба Расторгуевых–Харитоновых',
-        coords: [56.845602, 60.611045],
-        centuries: [19,20,21]
-      },
-      {
-        name: 'Здание первой типографии',
-        coords: [56.839939, 60.614623],
-        centuries: [18,19,20,21]
-      },
-      {
-        name: 'Екатеринбургский завод',
-        coords: [56.839892, 60.555582],
-        centuries: [18,19,20,21]
-      },
-      {
-        name: 'Георгиевская церковь',
-        coords: [56.881132, 60.522559],
-        centuries: [18,19,20,21]
-      },
-      {
-        name: 'Дом управляющего заводом',
-        coords: [56.840043, 60.552706],
-        centuries: [18,19,20,21]
-      },
-      {
-        name: 'Екатеринбург',
-        coords: [56.837803, 60.598837],
-        centuries: [18,19,20,21]
-      },
-      {
-        name: 'Храм Большой Златоуст',
-        coords: [56.834670, 60.600550],
-        centuries: [19,20,21]
-      },
-      {
-        name: 'Уральский Федеральный Университет',
-        coords: [56.844010, 60.653917],
-        centuries: [21]
-      },
-      {
-        name: 'Уральский Государственный Университет',
-        coords: [56.844010, 60.653917],
-        centuries: [20]
-      },
-      {
-        name: 'Храм-на-Крови',
-        coords: [56.844388, 60.609008],
-        centuries: [21]
-      },
-      {
-        name: 'Дом Н. И. Севастьянова',
-        coords: [56.839162, 60.606091],
-        centuries: [19,20,21]
-      },
-      {
-        name: 'Памятник клавиатуре',
-        coords: [56.832426, 60.607557],
-        centuries: [21]
-      },
-      {
-        name: 'Ельцин Центр',
-        coords: [56.844835, 60.591415],
-        centuries: [21]
-      },
-      {
-        name: 'Бизнес-центр "Высоцкий"',
-        coords: [56.836077, 60.614598],
-        centuries: [21]
-      },
-      {
-        name: 'Екатеринбург Арена',
-        coords: [56.8325, 60.5736],
-        centuries: [21]
-      },
-      {
-        name: 'Дом Правительства Свердловской области',
-        coords: [56.888578, 60.613591],
-        centuries: [20,21]
-      },
-      {
-        name: 'Уралмаш',
-        coords: [56.888578, 60.613591],
-        centuries: [20,21]
-      },
-      {
-        name: 'Цирк',
-        coords: [56.825904, 60.604911],
-        centuries: [20,21]
-      },
-      {
-        name: 'Театр оперы и балета',
-        coords: [56.838880, 60.616657],
-        centuries: [19,20,21]
-      },
-      {
-        name: 'Екатеринбургская плотина',
-        coords: [56.838624, 60.603383],
-        centuries: [18,19,20,21]
-      },
-      {
-        name: 'Домики мастеровых',
-        coords: [56.836044, 60.588615],
-        centuries: [18,19,20,21]
-      },
-      {
-        name: 'Городская управа',
-        coords: [56.837257, 60.597623],
-        centuries: [18,19,20,21]
-      },
-      {
-        name: 'Первая церковь',
-        coords: [56.838352, 60.607489],
-        centuries: [18,19,20,21]
-      },
-      {
-        name: 'Первая школа',
-        coords: [56.838432, 60.571633],
-        centuries: [18,19,20,21]
-      },
-      {
-        name: 'Мемориал на площади 1905 года',
-        coords: [56.837831, 60.596339],
-        centuries: [20,21]
-      },
-      {
-        name: 'Парк Маяковского',
-        coords: [56.8450, 60.6250],
-        centuries: [20,21]
-      },
-      {
-        name: 'Новая набережная реки Исеть',
-        coords: [56.844228, 60.594699],
-        centuries: [21]
-      },
-      {
-        name: 'ТЦ "Алатырь"',
-        coords: [56.832881, 60.582297],
-        centuries: [21]
-      },
-      {
-        name: 'Детская Свердловская железная дорога',
-        coords: [56.817395, 60.639593],
-        centuries: [20,21]
-      }
-    ];
-
-    window.placemarks = [];
-
-    // Добавляем каждую точку как Placemark на карту
-    markersData.forEach(item => {
-      const preset = getIconPreset(item.centuries);
-      const placemark = new ymaps.Placemark(
-        item.coords,
-        {
-          balloonContentHeader: item.name,
-          balloonContentBody: `<button class="route-button" onclick="buildRouteTo(${item.coords[0]}, ${item.coords[1]})">Построить маршрут</button>`,
-          balloonContentFooter: '',
-          centuries: item.centuries
-        },
-        {
-          preset: preset
-        }
-      );
-
-      // Обработчик клика по метке
-      placemark.events.add('click', function () {
-        sendMarkerDataToApp({
-          name: item.name,
-          coords: item.coords,
-          centuries: item.centuries
-        });
-      });
-
-      placemarks.push(placemark);
-      myMap.geoObjects.add(placemark);
-    });
-
-
-    window.applyCenturyFilter = function () {
-      const selectedCentury = document.getElementById('centuryFilter').value;
-
-      placemarks.forEach(placemark => {
-        const pointCenturies = placemark.properties.get('centuries') || [];
-
-        if (!selectedCentury || pointCenturies.includes(parseInt(selectedCentury))) {
-          myMap.geoObjects.add(placemark);
-        } else {
-          myMap.geoObjects.remove(placemark);
-        }
-      });
-    };
     
-    // Добавляем каждую точку на карту
     window.buildRouteTo = function(lat, lon) {
       if (!userPosition) {
-        alert("Сначала выберите ваше местоположение.");
+        alert("Сначала выберите точку старта, кликнув на карту");
         return;
       }
-
+      
       const destinationCoords = [lat, lon];
-
       if (currentRoute) {
         myMap.geoObjects.remove(currentRoute);
       }
-
+      
       currentRoute = new ymaps.multiRouter.MultiRoute({
         referencePoints: [userPosition, destinationCoords],
         params: {
@@ -407,85 +1092,9 @@
       }, {
         boundsAutoApply: true
       });
-
+      
       myMap.geoObjects.add(currentRoute);
     };
-        
-    // --- Выбор пользователем своей позиции ---
-    myMap.events.add('click', function (e) {
-      if (userLocationSet) return; 
-
-      const coords = e.get('coords');
-
-      if (userPlacemark) {
-        myMap.geoObjects.remove(userPlacemark);
-      }
-
-      userPlacemark = new ymaps.Placemark(coords, {
-        balloonContent: 'Вы здесь'
-      }, {
-        preset: 'islands#blackIcon'
-      });
-
-      myMap.geoObjects.add(userPlacemark);
-      myMap.setCenter(coords, 15);
-
-      userPosition = coords;
-      userLocationSet = true;
-    });
-
-    // --- Построение маршрута ---
-    window.buildRouteTo = function(lat, lon) {
-      if (!userPosition) {
-        alert("Сначала выберите ваше местоположение.");
-        return;
-      }
-
-      const destinationCoords = [lat, lon];
-
-      if (currentRoute) {
-        myMap.geoObjects.remove(currentRoute);
-      }
-
-      currentRoute = new ymaps.multiRouter.MultiRoute({
-        referencePoints: [userPosition, destinationCoords],
-        params: {
-          routingMode: 'pedestrian'
-        }
-      }, {
-        boundsAutoApply: true
-      });
-
-      myMap.geoObjects.add(currentRoute);
-    };
-  }
-
-  function sendMarkerDataToApp(markerData) {
-  // Отправляем данные в app.js через WebView
-  window.postMessage(JSON.stringify(markerData), '*');
-  }
-
-  showLocationPrompt();
-  
-</script>
-
-<!-- Модальное окно -->
-<div id="locationPrompt" style="
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  font-family: sans-serif;
-  text-align: center;
-">
-  <strong>Пожалуйста, выберите ваше местоположение на карте.</strong>
-  <button onclick="closeLocationPrompt()">OK</button>
-</div>
-
+  </script>
 </body>
 </html>
