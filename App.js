@@ -117,7 +117,7 @@ const markersData = {
       description: 'В XX веке здание использовалось для административных нужд.'
     },
     'Театр оперы и балета': {
-      image: require('./assets/21/theater.jpg'),
+      image: require('./assets/21/theater.png'),
       description: 'Советский период театра с классическими постановками.'
     },
     'Торговые ряды': {
