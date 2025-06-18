@@ -969,7 +969,6 @@ export default function App() {
   });
   const [authError, setAuthError] = useState('');
   const [userData, setUserData] = useState(initialUserData);
-  const [showCenturyPanel, setShowCenturyPanel] = useState(false);
   const [showMarkerPanel, setShowMarkerPanel] = useState(false);
   const [showProfilePanel, setShowProfilePanel] = useState(false);
   const [showQuizPanel, setShowQuizPanel] = useState(false);
@@ -979,7 +978,6 @@ export default function App() {
   const [userAnswers, setUserAnswers] = useState([]);
   const [quizScore, setQuizScore] = useState(0);
   const slideAnim = useRef(new Animated.Value(0)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
   const profileAnim = useRef(new Animated.Value(height)).current;
   const quizAnim = useRef(new Animated.Value(height)).current;
   const webViewRef = useRef(null);
