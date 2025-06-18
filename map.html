@@ -13,13 +13,10 @@
       font-family: 'Arial', sans-serif;
       background-color: #F5F5F5;
     }
-    
     #map {
       width: 100%;
-      height: 100%;
+      height: calc(100% - 60px);
     }
-    
-    /* Общие стили для кнопок */
     button {
       font-size: 14px;
       padding: 10px 16px;
@@ -30,18 +27,15 @@
       transition: all 0.3s ease;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    
     button:hover {
       opacity: 0.9;
       transform: translateY(-1px);
       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
-    
     button:active {
       transform: translateY(0);
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    
     .route-button {
       background-color: #4CAF50;
       color: white;
@@ -50,8 +44,6 @@
       width: calc(100% - 10px);
       text-align: center;
     }
-    
-    /* Стили для информационного окна */
     .info-window {
       position: fixed;
       top: 50%;
@@ -69,12 +61,10 @@
       padding: 20px;
       box-sizing: border-box;
     }
-    
     .info-window-content {
       display: flex;
       flex-direction: column;
     }
-    
     .info-window-header {
       font-size: 22px;
       font-weight: bold;
@@ -83,7 +73,6 @@
       padding-bottom: 10px;
       border-bottom: 1px solid #E0E0E0;
     }
-    
     .info-window-image {
       width: 100%;
       height: 200px;
@@ -91,14 +80,12 @@
       border-radius: 12px;
       margin-bottom: 15px;
     }
-    
     .centuries-container {
       margin-bottom: 15px;
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
     }
-    
     .info-window-century {
       display: inline-block;
       padding: 4px 10px;
@@ -107,14 +94,12 @@
       font-weight: bold;
       color: white;
     }
-    
     .info-window-description {
       font-size: 15px;
       line-height: 1.6;
       color: #555;
       margin-bottom: 15px;
     }
-    
     .fact-item {
       margin-bottom: 10px;
       padding-left: 15px;
@@ -122,7 +107,6 @@
       font-size: 14px;
       color: #666;
     }
-    
     .fact-item:before {
       content: "•";
       position: absolute;
@@ -130,7 +114,6 @@
       color: #4CAF50;
       font-weight: bold;
     }
-    
     .info-window-close {
       align-self: flex-end;
       padding: 10px 20px;
@@ -139,7 +122,6 @@
       font-weight: 600;
       margin-top: 10px;
     }
-    
     .info-window-overlay {
       position: fixed;
       top: 0;
@@ -150,8 +132,6 @@
       z-index: 9999;
       display: none;
     }
-    
-    /* Стили для викторины */
     .quiz-window {
       position: fixed;
       top: 50%;
@@ -169,7 +149,6 @@
       padding: 20px;
       box-sizing: border-box;
     }
-    
     .quiz-header {
       font-size: 20px;
       font-weight: bold;
@@ -179,18 +158,15 @@
       border-bottom: 1px solid #E0E0E0;
       text-align: center;
     }
-    
     .quiz-question {
       font-size: 16px;
       font-weight: 600;
       margin-bottom: 15px;
       color: #333;
     }
-    
     .quiz-options {
       margin-bottom: 20px;
     }
-    
     .quiz-option {
       display: block;
       margin-bottom: 10px;
@@ -201,21 +177,17 @@
       transition: all 0.3s;
       border: 1px solid #E0E0E0;
     }
-    
     .quiz-option:hover {
       background-color: #e9e9e9;
     }
-    
     .quiz-option.correct {
       background-color: #C8E6C9;
       border-color: #4CAF50;
     }
-    
     .quiz-option.incorrect {
       background-color: #FFCDD2;
       border-color: #F44336;
     }
-    
     .quiz-result {
       font-size: 16px;
       font-weight: bold;
@@ -225,17 +197,14 @@
       padding: 10px;
       border-radius: 8px;
     }
-    
     .quiz-result.correct {
       background-color: #C8E6C9;
       color: #2E7D32;
     }
-    
     .quiz-result.incorrect {
       background-color: #FFCDD2;
       color: #C62828;
     }
-    
     .quiz-next {
       display: none;
       margin: 15px auto 0;
@@ -244,7 +213,6 @@
       color: white;
       font-weight: 600;
     }
-    
     .quiz-close {
       margin-top: 15px;
       padding: 10px 20px;
@@ -254,8 +222,6 @@
       display: block;
       width: 100%;
     }
-    
-    /* Элементы управления картой */
     #centurySelector {
       position: absolute;
       bottom: 80px;
@@ -267,21 +233,12 @@
       border-radius: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-    
     #resetControl {
       position: absolute;
       bottom: 40px;
       left: 10px;
       z-index: 1000;
     }
-    
-    #quizControl {
-      position: absolute;
-      bottom: 80px;
-      right: 10px;
-      z-index: 1000;
-    }
-    
     #legend {
       position: absolute;
       top: 10px;
@@ -294,7 +251,6 @@
       width: 160px;
       font-size: 12px;
     }
-    
     select {
       font-size: 14px;
       padding: 8px 12px;
@@ -304,34 +260,176 @@
       background-color: white;
       min-width: 150px;
     }
-    
-    /* Адаптивные стили */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background-color: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+    .nav-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 33.33%;
+      text-decoration: none;
+      color: #757575;
+    }
+    .nav-button.active {
+      color: #4CAF50;
+    }
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+    }
+    .nav-label {
+      font-size: 12px;
+    }
+    .profile-panel {
+      position: fixed;
+      bottom: 60px;
+      left: 0;
+      right: 0;
+      height: 70vh;
+      background-color: white;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+      z-index: 999;
+      display: none;
+      overflow-y: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .profile-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .profile-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 40px;
+      border: 3px solid #4CAF50;
+      margin-bottom: 10px;
+    }
+    .profile-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #212121;
+    }
+    .stats-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+    .stat-item {
+      width: 45%;
+      max-width: 200px;
+      background-color: #f5f5f5;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 20px;
+      font-weight: bold;
+      color: #4CAF50;
+      margin-bottom: 5px;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: #757575;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #212121;
+      margin-bottom: 15px;
+    }
+    .achievement-item {
+      display: flex;
+      align-items: center;
+      background-color: white;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .achievement-icon {
+      width: 40px;
+      height: 40px;
+      margin-right: 12px;
+    }
+    .achievement-text {
+      flex: 1;
+    }
+    .achievement-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #212121;
+      margin-bottom: 3px;
+    }
+    .achievement-description {
+      font-size: 12px;
+      color: #757575;
+    }
+    .close-button {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 30px;
+      height: 30px;
+      border-radius: 15px;
+      background-color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #757575;
+      cursor: pointer;
+    }
     @media (max-width: 480px) {
       .info-window, .quiz-window {
         width: 95%;
         padding: 15px;
       }
-      
       .info-window-header {
         font-size: 20px;
       }
-      
       .info-window-image {
         height: 150px;
       }
-      
-      #centurySelector, #quizControl {
+      #centurySelector {
         bottom: 70px;
       }
-      
       #resetControl {
         bottom: 30px;
+      }
+      .profile-panel {
+        height: 80vh;
+      }
+      .stat-item {
+        width: 100%;
+        max-width: none;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Информационное окно -->
   <div id="infoOverlay" class="info-window-overlay"></div>
   <div id="infoWindow" class="info-window">
     <div class="info-window-content">
@@ -342,8 +440,6 @@
       <button class="info-window-close" onclick="closeInfoWindow()">Закрыть</button>
     </div>
   </div>
-  
-  <!-- Окно викторины -->
   <div id="quizOverlay" class="info-window-overlay"></div>
   <div id="quizWindow" class="quiz-window">
     <div class="quiz-header" id="quizTitle">Викторина</div>
@@ -353,11 +449,64 @@
     <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Следующий вопрос</button>
     <button class="quiz-close" onclick="closeQuiz()">Закрыть</button>
   </div>
-  
-  <!-- Контейнер карты -->
+  <div id="profilePanel" class="profile-panel">
+    <div class="close-button" onclick="closeProfile()">×</div>
+    <div class="profile-header">
+      <img class="profile-photo" src="./assets/user-photo.png" alt="Фото пользователя">
+      <div class="profile-name">Пользователь</div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value">3/5</div>
+        <div class="stat-label">Изученные эпохи</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">12/60</div>
+        <div class="stat-label">Посещено точек</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">8/200</div>
+        <div class="stat-label">Пройдено викторин</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">3/30</div>
+        <div class="stat-label">Ваши достижения</div>
+      </div>
+    </div>
+    <div class="section-title">Достижения</div>
+    <div class="achievement-item">
+      <img class="achievement-icon" src="./assets/medal.png" alt="Медаль">
+      <div class="achievement-text">
+        <div class="achievement-title">Первые шаги</div>
+        <div class="achievement-description">Посетите 5 исторических мест</div>
+      </div>
+    </div>
+    <div class="achievement-item">
+      <img class="achievement-icon" src="./assets/quiz.png" alt="Викторина">
+      <div class="achievement-text">
+        <div class="achievement-title">Эрудит</div>
+        <div class="achievement-description">Пройдите 10 викторин</div>
+      </div>
+    </div>
+    <div class="achievement-item">
+      <img class="achievement-icon" src="./assets/explorer.png" alt="Исследователь">
+      <div class="achievement-text">
+        <div class="achievement-title">Исследователь</div>
+        <div class="achievement-description">Изучите 3 эпохи</div>
+      </div>
+    </div>
+    <div class="achievement-item" style="opacity: 0.6; position: relative;">
+      <img class="achievement-icon" src="./assets/history.png" alt="Историк" style="filter: grayscale(100%);">
+      <div class="achievement-text">
+        <div class="achievement-title" style="color: #aaa;">Историк</div>
+        <div class="achievement-description" style="color: #ccc;">Пройдите все викторины по одной эпохе</div>
+      </div>
+      <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background-color: rgba(255,255,255,0.5);">
+        <span style="font-size: 20px;">🔒</span>
+      </div>
+    </div>
+  </div>
   <div id="map"></div>
-  
-  <!-- Выбор века -->
   <div id="centurySelector">
     <select id="centuryFilter" onchange="applyCenturyFilter()">
       <option value="">Все эпохи</option>
@@ -367,18 +516,9 @@
       <option value="21">XXI век</option>
     </select>
   </div>
-  
-  <!-- Кнопка сброса -->
   <div id="resetControl">
     <button onclick="resetUserLocation()" style="background-color: #757575; color: white;">Сбросить местоположение</button>
   </div>
-  
-  <!-- Кнопка викторины -->
-  <div id="quizControl">
-    <button onclick="showQuizSelector()" style="background-color: #4CAF50; color: white;">Викторина</button>
-  </div>
-  
-  <!-- Легенда -->
   <div id="legend">
     <strong>Легенда:</strong><br>
     <span style="color: #0000FF;">●</span> XVIII век<br>
@@ -386,32 +526,46 @@
     <span style="color: #FFA500;">●</span> XX век<br>
     <span style="color: #FF0000;">●</span> XXI век<br>
   </div>
-  
-  <!-- Подключение API Яндекс.Карт -->
+  <div class="bottom-nav">
+    <a href="#" class="nav-button" onclick="showProfile()">
+      <img class="nav-icon" src="./assets/user-icon.png" alt="Профиль">
+      <span class="nav-label">Профиль</span>
+    </a>
+    <a href="#" class="nav-button active" onclick="showMap()">
+      <img class="nav-icon" src="./assets/map-icon.png" alt="Карта">
+      <span class="nav-label">Карта</span>
+    </a>
+    <a href="#" class="nav-button" onclick="showQuizSelector()">
+      <img class="nav-icon" src="./assets/quiz.png" alt="Викторины">
+      <span class="nav-label">Викторины</span>
+    </a>
+  </div>
   <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=cc2edfda-deef-47d7-a963-5853ae3beb53"></script>
-  
-  <!-- Скрипт карты -->
   <script>
-    // Функции для работы с информационным окном
+    function escapeHtml(unsafe) {
+      if (!unsafe) return '';
+      return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
     function showInfoWindow(title, imageUrl, centuries, description, facts) {
       document.getElementById('infoWindowTitle').textContent = title;
       document.getElementById('infoWindowImage').src = imageUrl;
       document.getElementById('infoWindowImage').alt = title;
-      
       let descHtml = `<p>${description}</p>`;
-      
       if (facts && facts.length > 0) {
         descHtml += '<h4 style="margin-top: 15px; margin-bottom: 5px; font-size: 16px;">Интересные факты:</h4>';
         facts.forEach(fact => {
           descHtml += `<div class="fact-item">${fact}</div>`;
         });
       }
-      
       document.getElementById('infoWindowDescription').innerHTML = descHtml;
-      
       const centuriesContainer = document.getElementById('infoWindowCenturies');
       centuriesContainer.innerHTML = '';
-      
       centuries.forEach(century => {
         const centurySpan = document.createElement('span');
         centurySpan.className = 'info-window-century';
@@ -419,16 +573,15 @@
         centurySpan.style.backgroundColor = getCenturyColor(century);
         centuriesContainer.appendChild(centurySpan);
       });
-      
       document.getElementById('infoOverlay').style.display = 'block';
       document.getElementById('infoWindow').style.display = 'block';
     }
-    
+
     function closeInfoWindow() {
       document.getElementById('infoOverlay').style.display = 'none';
       document.getElementById('infoWindow').style.display = 'none';
     }
-    
+
     function getCenturyName(century) {
       switch(century) {
         case 18: return 'XVIII век';
@@ -438,7 +591,7 @@
         default: return '';
       }
     }
-    
+
     function getCenturyColor(century) {
       switch(century) {
         case 18: return '#0000FF';
@@ -448,8 +601,7 @@
         default: return '#777777';
       }
     }
-    
-    // Функции для работы с викториной
+
     const quizzes = {
       18: {
         title: "Викторина: XVIII век",
@@ -652,11 +804,11 @@
         ]
       }
     };
-    
+
     let currentQuiz = null;
     let currentQuestionIndex = 0;
     let score = 0;
-    
+
     function showQuizSelector() {
       const quizSelect = document.createElement('div');
       quizSelect.style.position = 'fixed';
@@ -670,7 +822,6 @@
       quizSelect.style.zIndex = '10000';
       quizSelect.style.width = '90%';
       quizSelect.style.maxWidth = '400px';
-      
       quizSelect.innerHTML = `
         <h3 style="margin-top: 0; margin-bottom: 15px; text-align: center;">Выберите викторину</h3>
         <button onclick="startQuiz(18)" style="display: block; width: 100%; margin-bottom: 10px; background-color: #0000FF; color: white; padding: 12px;">XVIII век</button>
@@ -679,10 +830,9 @@
         <button onclick="startQuiz(21)" style="display: block; width: 100%; margin-bottom: 10px; background-color: #FF0000; color: white; padding: 12px;">XXI век</button>
         <button onclick="document.body.removeChild(this.parentNode)" style="display: block; width: 100%; margin-top: 10px; background-color: #757575; color: white; padding: 12px;">Отмена</button>
       `;
-      
       document.body.appendChild(quizSelect);
     }
-    
+
     function startQuiz(century) {
       document.body.querySelector('div')?.remove();
       currentQuiz = quizzes[century];
@@ -692,20 +842,17 @@
       document.getElementById('quizOverlay').style.display = 'block';
       document.getElementById('quizWindow').style.display = 'block';
     }
-    
+
     function showQuestion() {
       if (!currentQuiz || currentQuestionIndex >= currentQuiz.questions.length) {
         endQuiz();
         return;
       }
-      
       const question = currentQuiz.questions[currentQuestionIndex];
       document.getElementById('quizTitle').textContent = currentQuiz.title;
       document.getElementById('quizQuestion').textContent = question.question;
-      
       const optionsContainer = document.getElementById('quizOptions');
       optionsContainer.innerHTML = '';
-      
       question.options.forEach((option, index) => {
         const optionElement = document.createElement('div');
         optionElement.className = 'quiz-option';
@@ -713,15 +860,13 @@
         optionElement.onclick = () => selectAnswer(index);
         optionsContainer.appendChild(optionElement);
       });
-      
       document.getElementById('quizResult').style.display = 'none';
       document.getElementById('quizNext').style.display = 'none';
     }
-    
+
     function selectAnswer(selectedIndex) {
       const question = currentQuiz.questions[currentQuestionIndex];
       const options = document.querySelectorAll('.quiz-option');
-      
       options.forEach((option, index) => {
         option.style.pointerEvents = 'none';
         if (index === question.answer) {
@@ -730,7 +875,6 @@
           option.classList.add('incorrect');
         }
       });
-      
       const resultElement = document.getElementById('quizResult');
       if (selectedIndex === question.answer) {
         score++;
@@ -740,36 +884,58 @@
         resultElement.textContent = 'Неправильно!';
         resultElement.className = 'quiz-result incorrect';
       }
-      
       resultElement.style.display = 'block';
       document.getElementById('quizNext').style.display = 'block';
     }
-    
+
     function nextQuestion() {
       currentQuestionIndex++;
       showQuestion();
     }
-    
+
     function endQuiz() {
       document.getElementById('quizQuestion').textContent = `Викторина завершена! Ваш результат: ${score} из ${currentQuiz.questions.length}`;
       document.getElementById('quizOptions').innerHTML = '';
       document.getElementById('quizNext').style.display = 'none';
     }
-    
+
     function closeQuiz() {
       document.getElementById('quizOverlay').style.display = 'none';
       document.getElementById('quizWindow').style.display = 'none';
     }
-    
-    // Функции для работы с картой
+
+    function showProfile() {
+      document.getElementById('profilePanel').style.display = 'block';
+      document.querySelectorAll('.nav-button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelector('.nav-button:nth-child(1)').classList.add('active');
+    }
+
+    function closeProfile() {
+      document.getElementById('profilePanel').style.display = 'none';
+      document.querySelectorAll('.nav-button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelector('.nav-button:nth-child(2)').classList.add('active');
+    }
+
+    function showMap() {
+      document.getElementById('profilePanel').style.display = 'none';
+      document.querySelectorAll('.nav-button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelector('.nav-button:nth-child(2)').classList.add('active');
+    }
+
     var myMap;
     var userPosition = null;
     var currentRoute = null;
     var userPlacemark = null;
     var userLocationSet = false;
-    
+
     ymaps.ready(init);
-    
+
     function init() {
       myMap = new ymaps.Map("map", {
         center: [56.838011, 60.597465],
@@ -781,20 +947,20 @@
           [57.046116, 61.070928]
         ]
       });
-      
+
       const centuryPresets = {
         18: 'islands#blueIcon',
         19: 'islands#greenIcon',
         20: 'islands#orangeIcon',
         21: 'islands#redIcon'
       };
-      
+
       function getIconPreset(centuries) {
         if (!centuries || centuries.length === 0) return 'islands#grayIcon';
         const priorityCentury = centuries.sort((a, b) => a - b)[0];
         return centuryPresets[priorityCentury] || 'islands#grayIcon';
       }
-      
+
       window.markersData = [
         {
           name: 'Екатеринбургская плотина',
@@ -803,7 +969,7 @@
           image: './assets/21/dam.jpg',
           description: 'Плотина была построена по личному указу Петра I в рамках программы освоения Урала. Она стала первым гидротехническим сооружением на Урале и основой для работы металлургического завода.',
           facts: [
-            'Длина плотины — 92 метра',
+            'Длина плотины - 92 метра',
             'Строилась силами крепостных рабочих под руководством инженера Вильгельма де Геннена',
             'Пережила несколько реконструкций, но сохранила свою историческую значимость'
           ]
@@ -899,14 +1065,14 @@
           image: './assets/21/government.jpg',
           description: 'Здание было построено в стиле конструктивизма как символ советской власти. Оно стало центром управления регионом и местом принятия важнейших решений.',
           facts: [
-            'Имеет характерные черты конструктивизма — строгие линии, минимализм',
+            'Имеет характерные черты конструктивизма - строгие линии, минимализм',
             'Во время войны здесь принимались решения о мобилизации',
             'Сохранил исторические интерьеры'
           ]
         },
         {
           name: 'Завод Уралмаш',
-          coords: [56.888578, 60.613591],
+          coords: [56.883883, 60.594519],
           centuries: [20,21],
           image: './assets/21/uralmash.jpg',
           description: 'Один из крупнейших машиностроительных заводов СССР, основанный в 1933 и сыгравший ключевую роль в индустриализации страны.',
@@ -957,7 +1123,7 @@
           coords: [56.844835, 60.591415],
           centuries: [21],
           image: './assets/21/eltsin.jpg',
-          description: 'Музей первого президента России Бориса Ельцина, рассказывающий о его жизни и деятельности. Центр использует современные мультимедийные технологии.',
+          description: 'Музей первого президента России Бориса Ельцина, открытый в 2015 году. Современный культурный центр с интерактивными экспозициями.',
           facts: [
             'Использует интерактивные технологии для рассказа об истории',
             'Имеет обширный архив документов',
@@ -969,18 +1135,18 @@
           coords: [56.836077, 60.614598],
           centuries: [21],
           image: './assets/21/vysotsky.png',
-          description: 'Самое высокое здание в Екатеринбурге, названное в честь Владимира Высоцкого. Башня сочетает офисы, жилые помещения и торговые площади.',
+          description: 'Самое высокое здание в Екатеринбурге (188 м), открытое в 2011 году. На верхних этажах находится смотровая площадка.',
           facts: [
-            'Высота — 188 метров',
+            'Высота - 188 метров',
             'Имеет смотровую площадку с видом на город',
             'Сочетает офисы, жилье и торговые площади'
           ]
         },
         {
           name: 'Музей истории Свердловской железной дороги',
-          coords: [56.858794, 60.600726], // ул. Вокзальная, 14
+          coords: [56.858794, 60.600726],
           centuries: [20,21],
-          image: './assets/21/railway_museum.jpg',
+          image: './assets/21/museum.jpg',
           description: 'Музей расположен в здании первого железнодорожного вокзала Екатеринбурга, построенного в 1878 году. Экспозиция посвящена развитию железных дорог на Урале.',
           facts: [
             'В коллекции более 15 000 экспонатов',
@@ -1014,41 +1180,41 @@
         },
         {
           name: 'Храм-на-Крови',
-          coords: [56.844402, 60.609081], // ул. Царская, 10
+          coords: [56.844402, 60.609081],
           centuries: [21],
-          image: './assets/21/blood_church.jpg',
+          image: './assets/21/hram.webp',
           description: 'Православный храм, построенный на месте дома Ипатьева, где в 1918 году была расстреляна царская семья. Один из самых посещаемых храмов России.',
           facts: [
-          'Высота храма - 60 метров',
-          'В нижнем храме сохранился фундамент дома Ипатьева',
-          'Открыт в 2003 году к 300-летию Романовых'
+            'Высота храма - 60 метров',
+            'В нижнем храме сохранился фундамент дома Ипатьева',
+            'Открыт в 2003 году к 300-летию Романовых'
           ]
         },
         {
           name: 'Правительство Свердловской области',
-          coords: [56.841862, 60.594079], // пр. Ленина, 34
+          coords: [56.841862, 60.594079],
           centuries: [20,21],
           image: './assets/21/government.jpg',
           description: 'Здание в стиле сталинского неоклассицизма, построенное в 1950-х годах. Архитектурная доминанта центра Екатеринбурга.',
           facts: [
-          'Высота здания со шпилем - 65 метров',
-          'Первоначально строилось как Дом Советов',
-          'В подвалах сохранились бункеры времен холодной войны'
+            'Высота здания со шпилем - 65 метров',
+            'Первоначально строилось как Дом Советов',
+            'В подвалах сохранились бункеры времен холодной войны'
           ]
         },
         {
           name: 'Белая башня',
-          coords: [56.893181, 60.572393], // Точные координаты (ул. Бакинских комиссаров, 2а)
+          coords: [56.893181, 60.572393],
           centuries: [20],
-          image: './assets/20/white_tower.jpg',
+          image: './assets/21/white-tower.jpg',
           description: 'Водонапорная башня УЗТМ, построенная в 1929-1931 гг. в стиле конструктивизма. Символ индустриального Екатеринбурга и памятник архитектуры федерального значения.',
           facts: [
-          'Высота - 29 метров, диаметр - 16 метров',
-          'Построена по проекту Моисея Рейшера',
-          'В 2010-х годах реконструирована в культурное пространство',
-          'На верхнем ярусе находится смотровая площадка'
+            'Высота - 29 метров, диаметр - 16 метров',
+            'Построена по проекту Моисея Рейшера',
+            'В 2010-х годах реконструирована в культурное пространство',
+            'На верхнем ярусе находится смотровая площадка'
           ]
-        },                  
+        },          
         {
           name: 'ТЦ "Алатырь"',
           coords: [56.832881, 60.582297],
@@ -1062,18 +1228,24 @@
           ]
         }
       ];
-      
+
       window.placemarks = [];
-      
       markersData.forEach(item => {
         const preset = getIconPreset(item.centuries);
+        
+        // Экранируем все строки для безопасного использования в HTML
+        const escapedName = escapeHtml(item.name);
+        const escapedImage = escapeHtml(item.image);
+        const escapedDescription = escapeHtml(item.description);
+        const escapedFacts = item.facts ? item.facts.map(fact => escapeHtml(fact)) : [];
+        
         const placemark = new ymaps.Placemark(
           item.coords,
           {
             balloonContentHeader: item.name,
             balloonContentBody: `
               <button class="route-button" onclick="buildRouteTo(${item.coords[0]}, ${item.coords[1]})">Построить маршрут</button>
-              <button class="route-button" onclick="showInfoWindow('${item.name}', '${item.image}', [${item.centuries}], '${item.description}', ${JSON.stringify(item.facts || [])})">Узнать подробнее</button>
+              <button class="route-button" onclick="showInfoWindow('${escapedName}', '${escapedImage}', [${item.centuries}], '${escapedDescription}', ${JSON.stringify(escapedFacts)})">Узнать подробнее</button>
             `,
             balloonContentFooter: '',
             centuries: item.centuries
@@ -1082,15 +1254,10 @@
             preset: preset
           }
         );
-        
-        placemark.events.add('click', function() {
-          showInfoWindow(item.name, item.image, item.centuries, item.description, item.facts);
-        });
-        
         placemarks.push(placemark);
         myMap.geoObjects.add(placemark);
       });
-      
+
       window.applyCenturyFilter = function() {
         const selectedCentury = document.getElementById('centuryFilter').value;
         placemarks.forEach(placemark => {
@@ -1102,28 +1269,25 @@
           }
         });
       };
-      
+
       myMap.events.add('click', function(e) {
         if (userLocationSet) return;
-        
         const coords = e.get('coords');
         if (userPlacemark) {
           myMap.geoObjects.remove(userPlacemark);
         }
-        
         userPlacemark = new ymaps.Placemark(coords, {
           balloonContent: 'Вы здесь'
         }, {
           preset: 'islands#blackIcon'
         });
-        
         myMap.geoObjects.add(userPlacemark);
         myMap.setCenter(coords, 15);
         userPosition = coords;
         userLocationSet = true;
       });
     }
-    
+
     function resetUserLocation() {
       if (userPlacemark) {
         myMap.geoObjects.remove(userPlacemark);
@@ -1133,18 +1297,16 @@
       userLocationSet = false;
       myMap.setCenter([56.838011, 60.597465], 12);
     }
-    
+
     window.buildRouteTo = function(lat, lon) {
       if (!userPosition) {
         alert("Сначала выберите точку старта, кликнув на карту");
         return;
       }
-      
       const destinationCoords = [lat, lon];
       if (currentRoute) {
         myMap.geoObjects.remove(currentRoute);
       }
-      
       currentRoute = new ymaps.multiRouter.MultiRoute({
         referencePoints: [userPosition, destinationCoords],
         params: {
@@ -1153,7 +1315,6 @@
       }, {
         boundsAutoApply: true
       });
-      
       myMap.geoObjects.add(currentRoute);
     };
   </script>
