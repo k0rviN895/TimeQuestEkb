@@ -128,7 +128,7 @@
   </select>
 </div>
 
-<!-- Кнопка сброса точки старта — слева снизу -->
+<!-- Кнопка сброса точки старта --- слева снизу -->
 <div id="resetControl" style="
   position: absolute;
   bottom: 40px;
@@ -136,17 +136,20 @@
   z-index: 1000;
 ">
   <button onclick="resetUserLocation()" style="
-    padding: 6px 12px;
-    background-color: #e7e7e7;
+    padding: 10px 15px;
+    background-color: #4CAF50; /* Основной цвет из приложения */
     border: none;
-    border-radius: 4px;
+    border-radius: 12px; /* Скругление углов как в приложении */
     cursor: pointer;
     font-size: 14px;
-    color: #333;
+    font-weight: 600; /* Жирный шрифт */
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень как в приложении */
+    transition: background-color 0.3s; /* Плавное изменение цвета */
   ">Сбросить местоположение</button>
 </div>
 
-<!-- Кнопка сброса маршрута — слева снизу -->
+<!-- Кнопка сброса маршрута --- справа снизу -->
 <div id="resetRouteControl" style="
   position: absolute;
   bottom: 40px;
@@ -154,13 +157,16 @@
   z-index: 1000;
 ">
   <button onclick="resetRoute()" style="
-    padding: 6px 12px;
-    background-color: #e7e7e7;
+    padding: 10px 15px;
+    background-color: #4CAF50; /* Основной цвет из приложения */
     border: none;
-    border-radius: 4px;
+    border-radius: 12px; /* Скругление углов как в приложении */
     cursor: pointer;
     font-size: 14px;
-    color: #333;
+    font-weight: 600; /* Жирный шрифт */
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень как в приложении */
+    transition: background-color 0.3s; /* Плавное изменение цвета */
   ">Сбросить маршрут</button>
 </div>
 
