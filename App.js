@@ -277,7 +277,7 @@ const markersData = {
       description: 'Построен в 1847-1876 годах на средства купцов Казанцевых. Высота колокольни: 77 метров. Главный колокол весил 16 тонн.'
     },
     'Уральский Федеральный Университет': {
-      image: require('./assets/19/urfu.jpg'),
+      image: require('./assets/default-image.png'),
       description: 'На этом месте находились жилые особняки и торговые лавки. В конце века - здание городской управы.'
     },
     'Храм-на-Крови': {
@@ -766,80 +766,6 @@ const quizData = {
       options: ['Грамоте, счету и основам ремесел', 'Только религии', 'Торговле'],
       correctAnswer: 0
     }
-  ],
-  '17 век': [
-    {
-      id: 1,
-      question: 'Какие племена населяли территорию будущего Екатеринбурга в 17 веке?',
-      options: ['Башкирские племена', 'Казахи', 'Татары'],
-      correctAnswer: 0
-    },
-    {
-      id: 2,
-      question: 'Чем занимались местные племена в 17 веке?',
-      options: ['Охотой и рыболовством', 'Земледелием', 'Ремеслами'],
-      correctAnswer: 0
-    },
-    {
-      id: 3,
-      question: 'Что находилось на месте будущего Екатеринбурга в 17 веке?',
-      options: ['Торговые пути', 'Деревни', 'Крепости'],
-      correctAnswer: 0
-    },
-    {
-      id: 4,
-      question: 'Как использовалась территория будущего Храма-на-Крови в 17 веке?',
-      options: ['Наблюдательный пункт', 'Поселение', 'Святилище'],
-      correctAnswer: 0
-    },
-    {
-      id: 5,
-      question: 'Как использовалась территория будущего завода в 17 веке?',
-      options: ['Лесной массив', 'Пастбища', 'Поля'],
-      correctAnswer: 0
-    },
-    {
-      id: 6,
-      question: 'Какие сооружения были на месте будущей плотины?',
-      options: ['Брод через реку', 'Мост', 'Рыболовные сети'],
-      correctAnswer: 0
-    },
-    {
-      id: 7,
-      question: 'Где располагались временные стоянки племен?',
-      options: ['На берегу реки Исеть', 'В лесу', 'На холмах'],
-      correctAnswer: 0
-    },
-    {
-      id: 8,
-      question: 'Чем была территория будущего памятника клавиатуре?',
-      options: ['Заболоченный участок', 'Луг', 'Лес'],
-      correctAnswer: 0
-    },
-    {
-      id: 9,
-      question: 'Как передавались знания у местных племен?',
-      options: ['От старейшин к молодежи', 'В школах', 'Через письменность'],
-      correctAnswer: 0
-    },
-    {
-      id: 10,
-      question: 'Какие животные водились в этих местах в 17 веке?',
-      options: ['Лоси, медведи, бобры', 'Волки, лисы', 'Все перечисленные'],
-      correctAnswer: 2
-    },
-    {
-      id: 11,
-      question: 'Какие торговые пути проходили через эти места?',
-      options: ['Из Сибири в Центральную Россию', 'Из Китая в Европу', 'Из Индии в Россию'],
-      correctAnswer: 0
-    },
-    {
-      id: 12,
-      question: 'Какие природные ресурсы привлекали людей в этот регион?',
-      options: ['Руды и минералы', 'Плодородные земли', 'Лекарственные растения'],
-      correctAnswer: 0
-    }
   ]
 };
 
@@ -1167,11 +1093,6 @@ export default function App() {
     }
   };
 
-  // Выбор века
-  const handleCenturySelect = (century) => {
-    setSelectedCentury(century);
-    toggleCenturyPanel();
-  };
 
   // Переключение панели профиля
   const toggleProfilePanel = () => {
@@ -1271,7 +1192,7 @@ export default function App() {
     if (!selectedMarker || !markersData[selectedCentury] || !markersData[selectedCentury][selectedMarker]) {
       return {
         image: require('./assets/default-image.png'),
-        description: 'Информация недоступна для выбранного периода'
+        description: 'Извините, но информация недоступна. Скорее всего данной постройки не существовало в выбранную эпоху'
       };
     }
     return markersData[selectedCentury][selectedMarker];
@@ -1300,43 +1221,6 @@ export default function App() {
       <View style={styles.mapContainer}>
         <Map onMarkerPress={handleMarkerPress} selectedCentury={selectedCentury} />
       </View>
-
-      {/* Кнопка выбора века */}
-      {!showProfilePanel && !showMarkerPanel && (
-        <View style={styles.centuryButtonWrapper}>
-          <TouchableOpacity
-            style={styles.centuryButton}
-            onPress={toggleCenturyPanel}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.centuryButtonText}>Выбрать век: {selectedCentury}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Панель выбора века */}
-      {showCenturyPanel && (
-        <Animated.View
-          style={[
-            styles.centuryPanel,
-            { opacity: fadeAnim }
-          ]}
-        >
-          {['21 век', '20 век', '19 век', '18 век', '17 век'].map((century) => (
-            <TouchableOpacity
-              key={century}
-              style={[
-                styles.centuryOptionButton,
-                selectedCentury === century && styles.selectedCenturyOption
-              ]}
-              onPress={() => handleCenturySelect(century)}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.centuryOptionButtonText}>{century}</Text>
-            </TouchableOpacity>
-          ))}
-        </Animated.View>
-      )}
 
       {/* Панель информации о маркере */}
       {showMarkerPanel && (
@@ -1381,26 +1265,26 @@ export default function App() {
                 <TouchableOpacity
                   style={styles.navArrow}
                   onPress={() => {
-                    const markers = Object.keys(markersData[selectedCentury]);
-                    const currentIndex = markers.indexOf(selectedMarker);
-                    const prevIndex = (currentIndex - 1 + markers.length) % markers.length;
-                    setSelectedMarker(markers[prevIndex]);
+                    const centuries = ['18 век', '19 век', '20 век', '21 век'];
+                    const currentIndex = centuries.indexOf(selectedCentury);
+                    const prevIndex = (currentIndex - 1 + centuries.length) % centuries.length;
+                    setSelectedCentury(centuries[prevIndex]);
                   }}
                 >
                   <Text style={styles.navArrowText}>←</Text>
                 </TouchableOpacity>
               
                 <Text style={styles.markerCounter}>
-                  {Object.keys(markersData[selectedCentury]).indexOf(selectedMarker) + 1} / {Object.keys(markersData[selectedCentury]).length}
+                  {selectedCentury}
                 </Text>
               
                 <TouchableOpacity
                   style={styles.navArrow}
                   onPress={() => {
-                    const markers = Object.keys(markersData[selectedCentury]);
-                    const currentIndex = markers.indexOf(selectedMarker);
-                    const nextIndex = (currentIndex + 1) % markers.length;
-                    setSelectedMarker(markers[nextIndex]);
+                    const centuries = ['18 век', '19 век', '20 век', '21 век'];
+                    const currentIndex = centuries.indexOf(selectedCentury);
+                    const nextIndex = (currentIndex + 1) % centuries.length;
+                    setSelectedCentury(centuries[nextIndex]);
                   }}
                 >
                   <Text style={styles.navArrowText}>→</Text>
@@ -1633,72 +1517,6 @@ const styles = StyleSheet.create({
   activeNavButtonText: {
     color: colors.primary,
     fontWeight: '600',
-  },
-  centuryButtonWrapper: {
-    position: 'absolute',
-    bottom: 80,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    zIndex: 10,
-  },
-  centuryButton: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
-    elevation: 4,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-  },
-  centuryButtonText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: '600',
-    marginRight: 8,
-  },
-  centuryButtonIcon: {
-    width: 16,
-    height: 16,
-    tintColor: colors.white,
-  },
-  centuryPanel: {
-    position: 'absolute',
-    bottom: 120,
-    left: 0,
-    right: 0,
-    backgroundColor: colors.cardBackground,
-    padding: 16,
-    borderRadius: 16,
-    alignItems: 'center',
-    elevation: 5,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    marginHorizontal: 40,
-    zIndex: 20,
-  },
-  centuryOptionButton: {
-    backgroundColor: colors.lightGray,
-    marginVertical: 6,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    width: '100%',
-    alignItems: 'center',
-  },
-  selectedCenturyOption: {
-    backgroundColor: colors.primary,
-  },
-  centuryOptionButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.text,
   },
   markerPanel: {
     position: 'absolute',
