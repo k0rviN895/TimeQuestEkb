@@ -73,7 +73,7 @@ const markersData = {
       description: 'В XX веке на этом месте находились различные административные здания.'
     },
     'Бизнес-центр "Высоцкий"': {
-      image: require('./assets/21/vysotsky.jpeg'),
+      image: require('./assets/21/vysotsky.png'),
       description: 'В XX веке на этом месте находились жилые кварталы и небольшие предприятия.'
     },
     'Екатеринбург Арена': {
