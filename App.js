@@ -121,7 +121,7 @@ const markersData = {
       description: 'Советский период театра с классическими постановками.'
     },
     'Торговые ряды': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'В XX веке торговые ряды были национализированы и преобразованы.'
     },
     'Екатеринбургская плотина': {
@@ -129,7 +129,7 @@ const markersData = {
       description: 'В XX веке плотина была реконструирована и продолжала использоваться.'
     },
     'Екатеринбургский завод': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'В XX веке завод был расширен и модернизирован.'
     },
     'Домики мастеровых': {
@@ -199,7 +199,7 @@ const markersData = {
       description: 'В XX веке на этом месте находился центральный рынок города.'
     },
     'Парк "Гора Крестов"': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'В XX веке это место было малоизвестным и неблагоустроенным.'
     },
     'Дом Правительства Свердловской области': {
@@ -235,7 +235,7 @@ const markersData = {
       description: 'Советский период театра с классическими постановками.'
     },
     'Торговые ряды': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'В XX веке торговые ряды были национализированы и преобразованы.'
     },
     'Екатеринбургская плотина': {
@@ -243,7 +243,7 @@ const markersData = {
       description: 'В XX веке плотина была реконструирована и продолжала использоваться.'
     },
     'Екатеринбургский завод': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'В XX веке завод был расширен и модернизирован.'
     },
     'Домики мастеровых': {
@@ -297,7 +297,7 @@ const markersData = {
       description: 'В XIX веке на этом месте находилось здание городской думы.'
     },
     'Мемориал на площади 1905 года': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'В XIX веке это была главная торговая площадь города.'
     },
     'Парк Маяковского': {
@@ -313,7 +313,7 @@ const markersData = {
       description: 'Первый стационарный театр города, открытый в конце XIX века. Вмещал до 800 зрителей, получил прозвище "Белый лебедь".'
     },
     'Торговые ряды': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'Центр торговли города в XIX веке. Здесь располагались магазины и торговые лавки купцов.'
     },
     'Екатеринбургская плотина': {
@@ -325,11 +325,11 @@ const markersData = {
       description: 'В XIX веке завод продолжал работать, но уже не был основным предприятием города.'
     },
     'Домики мастеровых': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'В XIX веке первые дома рабочих были перестроены или снесены.'
     },
     'Городская управа': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'Административный центр города в XIX веке. Здесь принимались важные решения о развитии города.'
     },
     'Первая церковь': {
@@ -351,31 +351,31 @@ const markersData = {
       description: 'На этом месте находилась деревянная церковь Святого Иоанна Златоуста, построенная в 1750-х годах.'
     },
     'Дом Правительства Свердловской области': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'В XVIII веке здесь находилось здание заводской конторы.'
     },
     'Торговые ряды': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'В XVIII веке здесь находился небольшой рынок.'
     },
     'Екатеринбургская плотина': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'Построена в 1723 году по указу Петра I. Первое гидротехническое сооружение на Урале, основа для работы металлургического завода.'
     },
     'Екатеринбургский завод': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'Первый металлургический завод города, основанный в 1723 году. Производил железо, чугун и пушки для русской армии.'
     },
     'Домики мастеровых': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'Первые жилые дома для рабочих завода, построенные в 1720-х годах. Деревянные избы с толстыми стенами для защиты от холода.'
     },
     'Городская управа': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'Городская управа была первым административным центром Екатеринбурга. Здесь принимались важные решения о развитии города.'
     },
     'Первая церковь': {
-      image: require('./assets/query.jpg'),
+      image: require('./assets/vopros.png'),
       description: 'Первая церковь в Екатеринбурге была построена на пожертвования местных жителей. Она стала духовным центром города.'
     },
     'Первая школа': {
@@ -1189,7 +1189,7 @@ export default function App() {
   const getMarkerData = () => {
     if (!selectedMarker || !markersData[selectedCentury] || !markersData[selectedCentury][selectedMarker]) {
       return {
-        image: require('./assets/query.jpg'),
+        image: require('./assets/vopros.png'),
         description: 'Извините, но информация недоступна. Скорее всего данной постройки не существовало в выбранную эпоху'
       };
     }
