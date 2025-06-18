@@ -1043,7 +1043,6 @@ export default function App() {
   });
   const [authError, setAuthError] = useState('');
   const [userData, setUserData] = useState(initialUserData);
-  const [showCenturyPanel, setShowCenturyPanel] = useState(false);
   const [showMarkerPanel, setShowMarkerPanel] = useState(false);
   const [showProfilePanel, setShowProfilePanel] = useState(false);
   const [showQuizPanel, setShowQuizPanel] = useState(false);
@@ -1053,7 +1052,6 @@ export default function App() {
   const [userAnswers, setUserAnswers] = useState([]);
   const [quizScore, setQuizScore] = useState(0);
   const slideAnim = useRef(new Animated.Value(0)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
   const profileAnim = useRef(new Animated.Value(height)).current;
   const quizAnim = useRef(new Animated.Value(height)).current;
   const webViewRef = useRef(null);
@@ -1147,24 +1145,6 @@ export default function App() {
       duration: 300,
       useNativeDriver: true,
     }).start(() => setShowMarkerPanel(false));
-  };
-
-  // Переключение панели выбора века
-  const toggleCenturyPanel = () => {
-    if (showCenturyPanel) {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }).start(() => setShowCenturyPanel(false));
-    } else {
-      setShowCenturyPanel(true);
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
-      }).start();
-    }
   };
 
   // Выбор века
@@ -1300,43 +1280,6 @@ export default function App() {
       <View style={styles.mapContainer}>
         <Map onMarkerPress={handleMarkerPress} selectedCentury={selectedCentury} />
       </View>
-
-      {/* Кнопка выбора века */}
-      {!showProfilePanel && !showMarkerPanel && (
-        <View style={styles.centuryButtonWrapper}>
-          <TouchableOpacity
-            style={styles.centuryButton}
-            onPress={toggleCenturyPanel}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.centuryButtonText}>Выбрать век: {selectedCentury}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Панель выбора века */}
-      {showCenturyPanel && (
-        <Animated.View
-          style={[
-            styles.centuryPanel,
-            { opacity: fadeAnim }
-          ]}
-        >
-          {['21 век', '20 век', '19 век', '18 век', '17 век'].map((century) => (
-            <TouchableOpacity
-              key={century}
-              style={[
-                styles.centuryOptionButton,
-                selectedCentury === century && styles.selectedCenturyOption
-              ]}
-              onPress={() => handleCenturySelect(century)}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.centuryOptionButtonText}>{century}</Text>
-            </TouchableOpacity>
-          ))}
-        </Animated.View>
-      )}
 
       {/* Панель информации о маркере */}
       {showMarkerPanel && (
@@ -1633,72 +1576,6 @@ const styles = StyleSheet.create({
   activeNavButtonText: {
     color: colors.primary,
     fontWeight: '600',
-  },
-  centuryButtonWrapper: {
-    position: 'absolute',
-    bottom: 80,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    zIndex: 10,
-  },
-  centuryButton: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
-    elevation: 4,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-  },
-  centuryButtonText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: '600',
-    marginRight: 8,
-  },
-  centuryButtonIcon: {
-    width: 16,
-    height: 16,
-    tintColor: colors.white,
-  },
-  centuryPanel: {
-    position: 'absolute',
-    bottom: 120,
-    left: 0,
-    right: 0,
-    backgroundColor: colors.cardBackground,
-    padding: 16,
-    borderRadius: 16,
-    alignItems: 'center',
-    elevation: 5,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    marginHorizontal: 40,
-    zIndex: 20,
-  },
-  centuryOptionButton: {
-    backgroundColor: colors.lightGray,
-    marginVertical: 6,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    width: '100%',
-    alignItems: 'center',
-  },
-  selectedCenturyOption: {
-    backgroundColor: colors.primary,
-  },
-  centuryOptionButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.text,
   },
   markerPanel: {
     position: 'absolute',
